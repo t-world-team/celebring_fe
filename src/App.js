@@ -1,24 +1,43 @@
-import logo from './logo.svg';
-import './App.css';
+import React from 'react';
+import { BrowserRouter as Router, Route, Redirect, Switch } from 'react-router-dom';
+import "./styles/style.scss";
+
+import Menu from "./components/Menu";
+import Main from './pages/Main';
+import Character from './pages/Character';
+import Event from './pages/Event';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+    <Router>
+      <header>
+        <div className="header-wrap">
+          <Menu/>
+        </div>
       </header>
-    </div>
+      <div className="main">
+        <main>
+          <Switch>
+            <Route path="/main" exact>
+              <Main/>
+            </Route>
+            <Route path="/character" exact>
+              <Character/>
+            </Route>
+            <Route path="/event" exact>
+              <Event/>
+            </Route>
+            <Redirect to="/main"/>
+          </Switch>
+        </main>
+        <footer>
+          <div>
+            <p>celebring</p>
+            <p>©2023</p>
+          </div>
+        </footer>
+      </div>
+    </Router>
   );
 }
 

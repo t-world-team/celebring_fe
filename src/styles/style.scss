@@ -1,0 +1,279 @@
+@import url(../fonts/font.css);
+@import "./variable.scss";
+@import "./common.scss";
+
+/* antD */
+.site-layout-content {
+    min-height: 280px;
+    padding: 24px;
+    background-color: $color-main;
+}
+
+/* swiper */
+.swiper {
+    width: 100%;
+    height: 300px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 0;
+    .swiper-slide {
+        text-align: center;
+        font-size: 18px;
+        background: #f0f0f0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 220px;
+        border-radius: 20px;
+        img {
+            display: block;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 20px;
+        }
+    }
+    @media (min-width: $width-tablet) {
+        height: 600px;
+        .swiper-slide {
+            width: 400px;
+        }
+    }
+}
+
+/* event */
+.event-component {
+    display: flex;
+    margin: 10px 5px;
+    a {
+        display: flex;
+        width: 100%;
+    }
+    .event-image {
+        line-height: 0;
+        img {
+            width: 70px;
+            height: 70px;
+            object-fit: cover;
+            border-radius: 10px;
+        }
+    }
+    .event-content {
+        margin: auto 10px;
+        flex-grow: 1;
+        .event-title {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 5px;
+            @include ellipsis(1);
+        }
+        p {
+            margin: 2px 0;
+            font-size: $font-s;
+        }
+    }
+    .event-like {
+        margin: auto 0;
+    }
+}
+
+/* detail */
+.page-header {
+    width: 100%;
+    img {
+        width: 100%;
+    }
+}
+
+/* profile */
+.profile {
+    width: 400px;
+    img {
+        width: 100%;
+    }
+    .profile-image {
+        position: absolute;
+        top: 90px;
+        img{
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            border-radius: 50px;
+            border: 5px solid #fff;
+        }
+    }
+}
+
+/* calendar */
+.event-calendar {
+    .calendar-title {
+        text-align: center;
+        h3 {
+            display: inline-block;
+            margin: 0 10px;
+        }
+    }
+    table div {
+        text-align: left;
+        .ant-badge {
+            position: absolute;
+            top: 6px;
+            right: 2px;
+        }
+    }
+}
+
+/* detail */
+.detail {
+    display: flex;
+    flex-wrap: wrap;
+    .detail-header {
+        position: relative;
+        padding-top: 75%;
+        overflow: hidden;
+        width: 100%;
+        @media (min-width: $width-mobile) {
+            max-height: 100%;
+            max-width: 300px;
+            padding-top: 0;
+            margin-right: 10px;
+            img {
+                width: 100%;
+            }
+        }
+        @media (min-width: $width-tablet) {
+            max-width: 400px;
+        }
+        @media (max-width: $width-mobile) {
+            .header-image-centered {
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                -webkit-transform: translate(50%,50%);
+                -ms-transform: translate(50%,50%);
+                transform: translate(50%,50%);
+                img {
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: auto;
+                    -webkit-transform: translate(-50%,-50%);
+                    -ms-transform: translate(-50%,-50%);
+                    transform: translate(-50%,-50%);
+                }
+            }
+        }
+    }
+    .detail-body {
+        display: flex;
+        flex-wrap: wrap;
+        flex: 1;
+        align-content: flex-start;
+        @media (max-width: $width-mobile) {
+            top: -50px;
+            position: relative;
+        }
+        .detail-profile {
+            display: flex;
+            @media (min-width: $width-mobile) {
+                align-items: center;
+            }
+            span {
+                flex-shrink: 0;
+                border: 1px solid #aaa;
+            }
+            h3 {
+                display: block;
+                @media (max-width: $width-mobile) {
+                    margin: 60px 10px 0;
+                }
+                @media (min-width: $width-mobile) {
+                    margin: 10px;
+                }
+            }
+        }
+        .detail-event, .detail-contents {
+            display: block;
+            width: 100%;
+            margin: 10px;
+        }
+        .detail-after {
+            display: block;
+            width: 100%;
+            h4 {
+                margin: 20px 10px 0;
+            }
+        }
+    }
+    .detail-events {
+        flex-grow: 1;
+        flex-basis: 400px;
+        @media (min-width: $width-mobile) {
+            .detail-title {
+                margin-bottom: 20px;
+            }
+        }
+        .detail-title {
+            display: flex;
+            h2, h3 {
+                margin-top: 15px;
+                display: inline-block;
+                flex-grow: 1;
+            }
+            .button-group {
+                display: inline-block;
+                flex-grow: 0;
+                margin: auto 0;
+            }
+        }
+    }
+}
+
+/* afterword */
+.aw-list {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+    .aw-item {
+        @media (max-width: $width-tablet) {
+            width: 50%;
+        }
+        @media (min-width: $width-tablet) {
+            width: 33%;
+        }
+        .aw-wrapper {
+            box-shadow: 0px 2px 5px 0px #ccc;
+            padding: 10px;
+            border-radius: 7px;
+            margin: 10px;
+            display: flex;
+            flex-wrap: wrap;
+            &:hover {
+                box-shadow: 0px 2px 8px 0px #aaa;
+            }
+            .aw-image {
+                width: 100%;
+                img {
+                    border-radius: 5px;
+                    width: 100%;
+                    max-height: 150px;
+                    object-fit: cover;
+                }
+            }
+            .aw-detail {
+                width: 100%;
+                .aw-title {
+                    margin: 5px 0;
+                    font-weight: 600;
+                    font-size: $font-m;
+                }
+                span {
+                    font-size: $font-s;
+                }
+            }
+        }
+    }
+}

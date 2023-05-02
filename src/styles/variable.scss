@@ -1,0 +1,21 @@
+/* layout height */
+$height-header: 57px;
+$height-footer: 95px;
+$height-main: calc(100% - #{$height-footer});
+
+/* color */
+$color-main: yellowgreen;
+$color-default: #000;
+
+/* responsive web size */
+$max-width: 1200px;
+$width-desktop: 1400px;
+$width-tablet: 1024px;
+$width-mobile: 768px;
+
+/* font size */
+$font-xs: 0.6rem;
+$font-s: 0.8rem;
+$font-m: 1rem;
+$font-l: 1.4rem;
+$font-xl: 2rem;

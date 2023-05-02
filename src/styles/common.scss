@@ -1,0 +1,116 @@
+* {font-family: 'NanumSquareRound'; box-sizing: border-box;}
+html, body, #root, section {height: 100%; margin: 0; background-color: #fff!important;}
+
+/* scroll style */
+*::-webkit-scrollbar { width: 7px; height: 7px; }
+*::-webkit-scrollbar-thumb { background-color: #999; border-radius: 5px; }
+*::-webkit-scrollbar-track { background-color: #ececec; border-radius: 5px; }
+body {overflow: hidden;}
+.main {overflow: auto; height: 100%;}
+
+/* common */
+h1, h2, h3, h4, h5 {
+    margin: 25px auto 10px auto;
+}
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+/* menu */
+.ant-drawer-body {
+    max-width: $max-width;
+    width: 100%;
+    margin: auto;
+}
+.button-list {
+    display: flex;
+    gap: 10px;
+    margin: 0px 10px 20px;
+    button {
+        flex-grow: 0;
+    }
+}
+
+/* header */
+header {
+    height: $height-header;
+    padding: 0!important;
+    padding-inline: 50px;
+    color: rgba(0, 0, 0, 0.88);
+    line-height: 64px;
+    background: #fff;
+    box-shadow: 0 0 5px 0 #aaa;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    display: inline-block;
+    z-index: 99999;
+    .header-wrap {
+        max-width: $max-width;
+        margin: auto;
+        display: flex;
+        justify-content: space-between;
+        height: 100%;
+        .logo {
+          float: left;
+          height: auto;
+          margin: 16px;
+          img {
+            width: 100%;
+            height: 100%;
+            display: block;
+          }
+        }
+        button {
+            margin: auto 10px;
+        }
+    }
+}
+
+/* root */
+#root {
+    padding-top: $height-header;
+}
+
+/* main */
+main {
+    min-height: $height-main; 
+    width: 100%;
+    max-width: $max-width;
+    margin: auto;
+    background-color: #fff;
+    padding: 10px 0;
+    nav {
+        margin: 10px!important;
+    }
+    @media (max-width: $max-width) {
+        > div {
+            &:not(.swiper){
+                margin: 0 10px;
+            }
+        }
+    }
+}
+
+/* footer */
+footer {
+    width: 100%; 
+    height: $height-footer;
+    position: relative; 
+    padding: 10px 20px;
+    font-size: 14px;
+    border-top: 1px solid #eee;
+    div {
+        max-width: $max-width;
+        margin: auto;
+    }
+}
+
+@mixin ellipsis($line-cnt) {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: $line-cnt;
+    -webkit-box-orient: vertical;
+}
