@@ -277,3 +277,14 @@
         }
     }
 }
+.aw-pop-content {
+    max-height: 500px;
+    max-width: 100%;
+    overflow: auto;
+    .aw-pop-image {
+        width: 100%;
+        img {
+            width: 100%;
+        }
+    }
+}
