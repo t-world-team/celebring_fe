@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import EventItem from '../components/EventItem';
 
-import { Button } from 'antd';
+import { Button, Carousel } from 'antd';
 import { CalendarOutlined, UnorderedListOutlined } from '@ant-design/icons';
 import CalendarItem from '../components/CalendarItem';
 
@@ -11,7 +11,11 @@ const Character = (props) => {
         <div className="detail">
             <div className="detail-header">
                 <div className="header-image-centered">
-                    <img src="https://pbs.twimg.com/media/FufPaNIWwAMmApz?format=jpg" alt="YookSungJae"/>
+                    <Carousel>
+                        <img src="https://pbs.twimg.com/media/FufPaNIWwAMmApz?format=jpg" alt="YookSungJae"/>
+                        <img src="https://pbs.twimg.com/media/FufOmIxWIAA_dNm?format=jpg" alt="SeoEunKwang"/>
+                        <img src="https://pbs.twimg.com/media/FufO8USX0AItfEw?format=jpg" alt="LeeChangSub"/>
+                    </Carousel>
                 </div>
             </div>
             <div className="detail-events">
