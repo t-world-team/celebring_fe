@@ -41,7 +41,7 @@ const Menu = () => {
         </div>
         <div className="menu-list">
           <div className="button-list">
-            <Button block size="large"><CalendarOutlined/> 이벤트 등록</Button>
+            <Button block size="large" key="link" href="/event/form"><CalendarOutlined/> 이벤트 등록</Button>
             <Button block size="large"><SmileOutlined/> 인물/그룹 등록</Button>
           </div>
           <Button type="text" block size="large" style={{textAlign: 'left'}}><SearchOutlined/> 검색</Button>

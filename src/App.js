@@ -6,6 +6,7 @@ import Menu from "./components/Menu";
 import Main from './pages/Main';
 import Character from './pages/Character';
 import Event from './pages/Event';
+import EventForm from './pages/EventForm';
 
 function App() {
   return (
@@ -26,6 +27,9 @@ function App() {
             </Route>
             <Route path="/event" exact>
               <Event/>
+            </Route>
+            <Route path="/event/form" exact>
+              <EventForm/>
             </Route>
             <Redirect to="/main"/>
           </Switch>

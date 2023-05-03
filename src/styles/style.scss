@@ -254,3 +254,12 @@
     display: flex;
     justify-content: space-between;
 }
+
+/* form */
+.form-button {
+    display: flex;
+    gap: 10px;
+    > * {
+        flex: 1 1;
+    }
+}

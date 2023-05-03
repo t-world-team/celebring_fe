@@ -3,7 +3,7 @@
 * Util
   * react router dom
 * Style
-  * Ant Design
+  * Ant Design (+ antd-img-crop)
   * SCSS(node-sass)
   * Swiper
   * react bootstrap icons
