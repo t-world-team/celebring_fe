@@ -36,6 +36,9 @@ a {
     display: flex;
     gap: 10px;
     margin: 0px 10px 20px;
+    a {
+        flex-grow: 1;
+    }
     button {
         flex-grow: 0;
     }

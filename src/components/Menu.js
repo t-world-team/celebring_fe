@@ -41,12 +41,18 @@ const Menu = () => {
         </div>
         <div className="menu-list">
           <div className="button-list">
-            <Button block size="large" key="link" href="/event/form"><CalendarOutlined/> 이벤트 등록</Button>
-            <Button block size="large"><SmileOutlined/> 인물/그룹 등록</Button>
+            <Link to="/event/form">
+              <Button block size="large" onClick={onClose}><CalendarOutlined/> 이벤트 등록</Button>
+            </Link>
+            <Link to="/event/form">
+              <Button block size="large" onClick={onClose}><SmileOutlined/> 인물/그룹 등록</Button>
+            </Link>
           </div>
           <Button type="text" block size="large" style={{textAlign: 'left'}}><SearchOutlined/> 검색</Button>
           <Button type="text" block size="large" style={{textAlign: 'left'}}><CarryOutOutlined/> 이벤트</Button>
-          <Button type="text" key="link" href="/mypage" block size="large" style={{textAlign: 'left'}}><UserOutlined/> 마이페이지</Button>
+          <Link to="/mypage">
+            <Button type="text" block size="large" style={{textAlign: 'left'}} onClick={onClose}><UserOutlined/> 마이페이지</Button>
+          </Link>
         </div>
       </Drawer>
     </>

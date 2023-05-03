@@ -102,6 +102,11 @@
 .detail {
     display: flex;
     flex-wrap: wrap;
+    .detail-icon {
+        display: flex;
+        flex-grow: 1;
+        justify-content: space-between;
+    }
     .detail-header {
         position: relative;
         padding-top: 75%;
@@ -137,13 +142,17 @@
         position: relative;
         .detail-profile {
             display: flex;
-            span {
+            .ant-avatar {
                 flex-shrink: 0;
                 border: 1px solid #aaa;
             }
-            h3 {
-                display: block;
-                margin: 60px 10px 0;
+            .detail-title {
+                display: flex;
+                margin: 60px 0 0;
+                justify-content: space-between;
+                h3 {
+                    margin: 0 10px 0;
+                }
             }
         }
         .detail-event, .detail-contents {
@@ -244,6 +253,10 @@
         flex: 1 1;
     }
 }
+.ant-picker-panels {
+    flex-wrap: wrap;
+    flex-direction: column;
+}
 
 /* tab */
 .ant-tabs-nav-wrap {
@@ -287,5 +300,13 @@
     }
     .celeb-fav-like {
         margin: auto 0;
+    }
+}
+
+/* panel */
+.ant-collapse-item {
+    .ant-collapse-header {
+        border-bottom: 1px solid #ccc;
+        padding: 10px 2px!important;
     }
 }
