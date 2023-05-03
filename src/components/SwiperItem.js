@@ -12,7 +12,7 @@ const images = [
     'https://pbs.twimg.com/media/FufPZXnWcAYo04i?format=jpg',
 ];
 
-export default function SwiperCpnt() {
+export default function SwiperItem() {
   return (
     <>
       <Swiper

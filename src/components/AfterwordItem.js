@@ -1,5 +1,12 @@
-import { Modal } from 'antd';
+import { Button, Modal } from 'antd';
 import React, { useState } from 'react';
+
+function prevAfterWord() {
+    console.log('prevAfterWord');
+}
+function nextAfterWord() {
+    console.log('nextAfterWord');
+}
 
 const AfterWord = (props) => {
     const [popupOpen, setPopupOpen] = useState(false);
@@ -23,7 +30,10 @@ const AfterWord = (props) => {
                     <span>2023.03.21</span>
                 </div>
             </div>
-            <Modal title={date + ' 후기'} open={popupOpen} onOk={closePopup} onCancel={closePopup} centered footer={null}>
+            <Modal title={date + ' 후기'} open={popupOpen} onOk={closePopup} onCancel={closePopup} centered footer={[
+                <Button type="text" onClick={prevAfterWord} >이전</Button>,
+                <Button type="text" onClick={nextAfterWord}>다음</Button>
+            ]}>
                 <div className="aw-pop-content">
                     <div className="aw-pop-image">
                         <img alt="sek" src="https://pbs.twimg.com/media/FufOmIxWIAA_dNm?format=jpg" />
