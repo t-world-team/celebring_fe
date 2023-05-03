@@ -7,6 +7,7 @@ import Main from './pages/Main';
 import Character from './pages/Character';
 import Event from './pages/Event';
 import EventForm from './pages/EventForm';
+import MyPage from './pages/MyPage';
 
 function App() {
   return (
@@ -30,6 +31,9 @@ function App() {
             </Route>
             <Route path="/event/form" exact>
               <EventForm/>
+            </Route>
+            <Route path="/mypage" exact>
+              <MyPage/>
             </Route>
             <Redirect to="/main"/>
           </Switch>

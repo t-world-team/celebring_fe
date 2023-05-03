@@ -79,25 +79,6 @@
     }
 }
 
-/* profile */
-.profile {
-    width: 400px;
-    img {
-        width: 100%;
-    }
-    .profile-image {
-        position: absolute;
-        top: 90px;
-        img{
-            width: 100px;
-            height: 100px;
-            object-fit: cover;
-            border-radius: 50px;
-            border: 5px solid #fff;
-        }
-    }
-}
-
 /* calendar */
 .event-calendar {
     .calendar-title {
@@ -261,5 +242,50 @@
     gap: 10px;
     > * {
         flex: 1 1;
+    }
+}
+
+/* tab */
+.ant-tabs-nav-wrap {
+    display: block!important;
+    .ant-tabs-nav-list {
+        justify-content: space-around;
+        .ant-tabs-tab {
+            flex: 1;
+            justify-content: center;
+            margin: 0;
+            font-weight: 600;
+        }
+    }
+}
+
+/* mypage */
+.mypage {
+    .mypage-title {
+        font-size: $font-l;
+        strong {
+            font-size: $font-xl;
+        }
+    }
+}
+
+/* celeb fav */
+.celeb-fav {
+    display: flex;
+    margin: 10px 5px;
+    a {
+        display: flex;
+        align-items: center;
+        width: 100%;
+    }
+    .celeb-fav-name {
+        display: block;
+        font-weight: 600;
+        font-size: $font-m;
+        margin-left: 10px;
+        @include ellipsis(1);
+    }
+    .celeb-fav-like {
+        margin: auto 0;
     }
 }

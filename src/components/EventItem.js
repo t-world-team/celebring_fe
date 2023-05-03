@@ -30,6 +30,7 @@ const EventItem = (props) => {
                         character={<HeartFilled />} 
                         count={1} 
                         defaultValue={heart}
+                        style={{color: 'red'}}
                     />
                 </div>
             : null}

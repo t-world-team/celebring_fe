@@ -46,7 +46,7 @@ const Menu = () => {
           </div>
           <Button type="text" block size="large" style={{textAlign: 'left'}}><SearchOutlined/> 검색</Button>
           <Button type="text" block size="large" style={{textAlign: 'left'}}><CarryOutOutlined/> 이벤트</Button>
-          <Button type="text" block size="large" style={{textAlign: 'left'}}><UserOutlined/> 마이페이지</Button>
+          <Button type="text" key="link" href="/mypage" block size="large" style={{textAlign: 'left'}}><UserOutlined/> 마이페이지</Button>
         </div>
       </Drawer>
     </>
