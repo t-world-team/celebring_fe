@@ -159,6 +159,11 @@
             display: block;
             width: 100%;
             margin: 10px;
+            .event-location {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+            }
         }
         .detail-after {
             display: block;

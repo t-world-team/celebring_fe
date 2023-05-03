@@ -1,9 +1,10 @@
 import React from 'react';
 
 import { Avatar, Button, Popover, Rate } from 'antd';
-import { EnvironmentOutlined, CalendarOutlined, TwitterOutlined, ShareAltOutlined, HeartFilled, MoreOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons';
+import { EnvironmentOutlined, CalendarOutlined, TwitterOutlined, ShareAltOutlined, HeartFilled, MoreOutlined, EditOutlined, DeleteOutlined, ZoomInOutlined } from '@ant-design/icons';
 import { AfterWordList } from '../components/AfterwordItem';
 import PanelItem from '../components/PanelItem';
+import { Map } from 'react-bootstrap-icons';
 
 const Event = (props) => {
     const url = props.url ? props.url : 'https://pbs.twimg.com/profile_images/912222837938589697/_OWluI2j_400x400.jpg';
@@ -15,7 +16,7 @@ const Event = (props) => {
     return (
         <div className="detail">
             <div className="detail-icon">
-                <Button type="text" size='large' shape="circle"><ShareAltOutlined/></Button>
+                <Button type="text" size='large' shape="circle" icon={<ShareAltOutlined/>}/>
                 <Rate 
                     character={<HeartFilled />} 
                     count={1} 
@@ -40,7 +41,7 @@ const Event = (props) => {
                                 <Button type="text"><DeleteOutlined/> 삭제</Button>
                             </React.Fragment>
                         } trigger="click">
-                            <Button type="text" shape='circle'><MoreOutlined/></Button>
+                            <Button type="text" shape='circle' icon={<MoreOutlined/>}/>
                         </Popover>
                             : null
                         }
@@ -48,8 +49,11 @@ const Event = (props) => {
                 </div>
                 <div className="detail-event">
                     <p className="event-date"><CalendarOutlined/> {date}</p>
-                    <p className="event-location"><EnvironmentOutlined/> {location}</p>
-                    <p className="event-location"><TwitterOutlined/> SNS 링크</p>
+                    <div className="event-location">
+                        <span><EnvironmentOutlined/> {location}</span>
+                        <Button type="default"><ZoomInOutlined/> 지도 보기</Button>
+                    </div>
+                    <p><TwitterOutlined/> SNS 링크</p>
                 </div>
                 <div className="detail-contents">
                     <PanelItem/>

@@ -16,6 +16,7 @@ a {
     text-decoration: none;
     color: inherit;
 }
+input::placeholder { font-family: 'NanumSquareRound'; }
 
 /* menu */
 .ant-drawer {
@@ -41,6 +42,15 @@ a {
     }
     button {
         flex-grow: 0;
+    }
+}
+.search {
+    .search-input {
+        margin: 30px;
+        border-bottom: 1px solid #ccc;
+    }
+    .search-result {
+        margin: 30px;
     }
 }
 
@@ -74,7 +84,7 @@ header {
             display: block;
           }
         }
-        button {
+        .header-icon {
             margin: auto 10px;
         }
     }
