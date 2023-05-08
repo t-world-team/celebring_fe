@@ -79,18 +79,19 @@ header {
         display: flex;
         justify-content: space-between;
         height: 100%;
+        flex-wrap: nowrap;
         .logo {
-          float: left;
           height: auto;
           margin: 16px;
           img {
-            width: 100%;
+            width: auto;
             height: 100%;
             display: block;
           }
         }
         .header-icon {
             margin: auto 10px;
+            display: flex;
         }
     }
 }
