@@ -1,10 +1,11 @@
 import React from 'react';
 
 import { Avatar, Button, Popover, Rate } from 'antd';
-import { EnvironmentOutlined, CalendarOutlined, TwitterOutlined, ShareAltOutlined, HeartFilled, MoreOutlined, EditOutlined, DeleteOutlined, ZoomInOutlined } from '@ant-design/icons';
+import { EnvironmentOutlined, CalendarOutlined, TwitterOutlined, HeartFilled, EditOutlined, DeleteOutlined, ZoomInOutlined } from '@ant-design/icons';
 import { AfterWordList } from '../components/AfterwordItem';
 import PanelItem from '../components/PanelItem';
-import { Map } from 'react-bootstrap-icons';
+import ShareBoxLineIcon from 'remixicon-react/ShareBoxLineIcon';
+import More2FillIcon from 'remixicon-react/More2FillIcon';
 
 const Event = (props) => {
     const url = props.url ? props.url : 'https://pbs.twimg.com/profile_images/912222837938589697/_OWluI2j_400x400.jpg';
@@ -16,7 +17,7 @@ const Event = (props) => {
     return (
         <div className="detail">
             <div className="detail-icon">
-                <Button type="text" size='large' shape="circle" icon={<ShareAltOutlined/>}/>
+                <Button type="text" shape="circle" icon={<ShareBoxLineIcon/>}/>
                 <Rate 
                     character={<HeartFilled />} 
                     count={1} 
@@ -41,7 +42,7 @@ const Event = (props) => {
                                 <Button type="text"><DeleteOutlined/> 삭제</Button>
                             </React.Fragment>
                         } trigger="click">
-                            <Button type="text" shape='circle' icon={<MoreOutlined/>}/>
+                            <Button type="text" shape='circle' icon={<More2FillIcon/>}/>
                         </Popover>
                             : null
                         }

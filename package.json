@@ -10,10 +10,10 @@
     "antd-img-crop": "^4.12.2",
     "node-sass": "^7.0.3",
     "react": "^18.2.0",
-    "react-bootstrap-icons": "^1.10.3",
     "react-dom": "^18.2.0",
     "react-router-dom": "5.3.4",
     "react-scripts": "5.0.1",
+    "remixicon-react": "^1.0.0",
     "swiper": "^9.2.4",
     "web-vitals": "^2.1.4"
   },

@@ -4,7 +4,7 @@ import { ConfigProvider, Calendar, Button, Badge } from 'antd';
 import { LeftOutlined, RightOutlined } from '@ant-design/icons';
 import locale from "antd/locale/ko_KR";
 import 'dayjs/locale/ko';
-import { Balloon } from 'react-bootstrap-icons';
+import Cake2LineIcon from 'remixicon-react/Cake2LineIcon';
 import EventItem from './EventItem';
 
 const eventDateList = [
@@ -49,7 +49,7 @@ const CalendarItem = (props) => {
             badge = <Badge color='green' count={99}/>;
         }
         if(anniversary === calDate) {
-            anniv = <Balloon style={{fontSize: 32, position: 'absolute', bottom: 10, right: 0}}/>;
+            anniv = <Cake2LineIcon style={{fontSize: 32, position: 'absolute', bottom: 10, right: 0}}/>;
         }
 
         return (
