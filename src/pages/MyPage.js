@@ -8,24 +8,24 @@ import { AfterWordList } from '../components/AfterwordItem';
 
 const tabFav = [
     {
-        key: 'celeb',
+        key: 'favCeleb',
         label: '인물/그룹',
         children: <CelebFav />,
     },
     {
-        key: 'event',
+        key: 'favEvent',
         label: '이벤트',
         children: <EventItem useHeart={true}/>,
     },
 ];
 const tabReg = [
     {
-        key: 'event',
+        key: 'regEvent',
         label: '이벤트',
         children: <EventItem/>,
     },
     {
-        key: 'afterword',
+        key: 'regAfterword',
         label: '후기',
         children: <AfterWordList/>
     },

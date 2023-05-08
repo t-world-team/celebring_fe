@@ -83,10 +83,10 @@ const Menu = () => {
           </div>
           <div className="search-result">
             <h3>인물</h3>
-            <CelebFav name="서은광" thumbnail="https://pbs.twimg.com/media/FufOnvXWwAMb80-?format=jpg"/>
-            <CelebFav name="육성재" thumbnail="https://pbs.twimg.com/media/FufPaNIWwAMmApz?format=jpg"/>
+            <CelebFav name="서은광" thumbnail="https://pbs.twimg.com/media/FufOnvXWwAMb80-?format=jpg" onClick={onClose}/>
+            <CelebFav name="육성재" thumbnail="https://pbs.twimg.com/media/FufPaNIWwAMmApz?format=jpg" onClick={onClose}/>
             <h3>그룹</h3>
-            <CelebFav name="비투비"/>
+            <CelebFav name="비투비" onClick={onClose}/>
           </div>
         </div>
       </Drawer>

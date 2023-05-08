@@ -28,10 +28,11 @@ const CelebFav = (props) => {
     let thumbnail = props.thumbnail ? props.thumbnail : 'https://pbs.twimg.com/media/FvFhOr5aYAAA88w?format=jpg';
     let name = props.name ? props.name : '비투비';
     let favorite = props.favorite ? props.favorite : 1;
+    let onClick = props.onClick ? props.onClick : null;
 
     return (
         <div className="celeb-fav">
-            <Link to={'/character'}>
+            <Link to={'/character'} onClick={onClick}>
                 <Avatar size={40} src={thumbnail} style={defaultStyle}></Avatar>
                 <span className="celeb-fav-name">{name}</span>
             </Link>
