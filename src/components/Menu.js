@@ -49,7 +49,9 @@ const Menu = () => {
         }}
       >
         <div className="login-list">
-          <h2 style={{marginLeft: 15, display: 'inline-block', marginBottom: 30}}>로그인</h2>
+          <Link to="/login">
+            <h2 style={{marginLeft: 15, display: 'inline-block', marginBottom: 30}}>로그인</h2>
+          </Link>
         </div>
         <div className="menu-list">
           <div className="button-list">

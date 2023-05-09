@@ -336,3 +336,19 @@
         padding: 10px 2px!important;
     }
 }
+
+/* login */
+.social-login {
+    display: flex;
+    flex-wrap: wrap;
+    margin: auto;
+    max-width: 200px;
+    gap: 10px;
+    .social-image {
+        width: 100%;
+        flex: 0 0 auto;
+        img {
+            width: 100%;
+        }
+    }
+}

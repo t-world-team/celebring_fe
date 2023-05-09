@@ -8,6 +8,7 @@ import Character from './pages/Character';
 import Event from './pages/Event';
 import EventForm from './pages/EventForm';
 import MyPage from './pages/MyPage';
+import { LoginPage } from './pages/Login';
 
 function App() {
   return (
@@ -34,6 +35,9 @@ function App() {
             </Route>
             <Route path="/mypage" exact>
               <MyPage/>
+            </Route>
+            <Route path="/login" exact>
+              <LoginPage/>
             </Route>
             <Redirect to="/main"/>
           </Switch>
