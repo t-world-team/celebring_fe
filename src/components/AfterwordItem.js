@@ -26,7 +26,6 @@ const AfterWord = (props) => {
                     <img alt="sek" src="https://pbs.twimg.com/media/FufOmIxWIAA_dNm?format=jpg" />
                 </div>
                 <div className="aw-detail">
-                    <p className="aw-title">후기 제목</p>
                     <span>2023.03.21</span>
                 </div>
             </div>
@@ -48,6 +47,9 @@ const AfterWord = (props) => {
 const AfterWordList = (props) => {
     return (
         <div className="aw-list">
+            <AfterWord />
+            <AfterWord />
+            <AfterWord />
             <AfterWord />
             <AfterWord />
             <AfterWord />

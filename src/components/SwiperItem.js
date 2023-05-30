@@ -14,22 +14,20 @@ const images = [
 
 export default function SwiperItem() {
   return (
-    <>
-      <Swiper
-        slidesPerView={"auto"}
-        centeredSlides={true}
-        spaceBetween={10}
-        loop={true}
-        pagination={{
-          clickable: true,
-        }}
-        modules={[Pagination]}
-        className="mySwiper"
-      >
-        {images.map(image => 
-            <SwiperSlide><img src={image} alt="hbd"/></SwiperSlide>
-        )}
-      </Swiper>
-    </>
+    <Swiper
+      slidesPerView={"auto"}
+      centeredSlides={true}
+      spaceBetween={10}
+      loop={true}
+      pagination={{
+        clickable: true,
+      }}
+      modules={[Pagination]}
+      className="mySwiper"
+    >
+      {images.map(image => 
+          <SwiperSlide><img src={image} alt="hbd"/></SwiperSlide>
+      )}
+    </Swiper>
   );
 }

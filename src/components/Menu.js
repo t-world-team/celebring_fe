@@ -1,10 +1,11 @@
 import React from 'react';
 
-import { Button, Drawer, Input } from 'antd';
+import { Button, Drawer, Input, Modal } from 'antd';
 import { useState } from 'react';
 import { MenuOutlined, CloseOutlined, SmileOutlined, SearchOutlined, CalendarOutlined, CarryOutOutlined, UserOutlined } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
 import { CelebFav } from './CelebItem';
+import { LoginPage } from '../pages/Login';
 
 const logo = process.env.PUBLIC_URL + '/celebring.png';
 
@@ -24,6 +25,15 @@ const Menu = () => {
     setOpenMenu(false);
     setOpenSearch(false);
   };
+
+  
+  const [loginOpen, setLoginOpen] = useState(false);
+
+  const loginPopup = () => {
+    setOpenMenu(false);
+    setLoginOpen(true);
+  }
+
   return (
     <>
       <div className="logo">
@@ -49,9 +59,16 @@ const Menu = () => {
         }}
       >
         <div className="login-list">
-          <Link to="/login">
-            <h2 style={{marginLeft: 15, display: 'inline-block', marginBottom: 30}}>로그인</h2>
-          </Link>
+          <h2 onClick={loginPopup} style={{marginLeft: 15, display: 'inline-block', marginBottom: 30}}>로그인</h2>
+          <Modal
+            centered
+            open={loginOpen}
+            onCancel={() => setLoginOpen(false)}
+            footer={null}
+            className="login-popup-wrap"
+          >
+            <LoginPage/>
+          </Modal>
         </div>
         <div className="menu-list">
           <div className="button-list">
