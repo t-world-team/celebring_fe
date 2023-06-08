@@ -9,6 +9,7 @@ import Event from './pages/Event';
 import EventForm from './pages/EventForm';
 import MyPage from './pages/MyPage';
 import { LoginPage } from './pages/Login';
+import Celeb from './pages/Celeb';
 
 function App() {
   return (
@@ -23,6 +24,9 @@ function App() {
           <Switch>
             <Route path="/main" exact>
               <Main/>
+            </Route>
+            <Route path="/celeb" exact>
+              <Celeb/>
             </Route>
             <Route path="/character" exact>
               <Character/>

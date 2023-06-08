@@ -1,18 +1,39 @@
 import React from 'react';
 
+import { HeartFilled } from '@ant-design/icons';
 import { Avatar, Rate } from 'antd';
 import { PlusOutlined, StarFilled } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { FreeMode } from 'swiper';
 
-const Celeb = (props) => {
+const mainColor = process.env.REACT_APP_MAIN_COLOR;
+
+const CelebAvatar = (props) => {
     const url = props.url ? props.url : 'https://pbs.twimg.com/profile_images/912222837938589697/_OWluI2j_400x400.jpg';
-    
+    const name = props.name ? props.name : '비투비';
+    const useLike = props.useLike != null ? props.useLike : false;
+    const like = props.like ? props.like : 1;
+
     return (
-        <Link to={'/character'}>
-            <Avatar size={80} src={url} style={defaultStyle}></Avatar>
-        </Link>
+        <React.Fragment>
+            <Link to={'/character'}>
+                <div className="celeb-avatar">
+                    <Avatar size={80} src={url} style={defaultStyle}></Avatar>
+                    <span className="celeb-name">{name}</span>
+                </div>
+            </Link>
+            {useLike ?
+                <div className="celeb-like">
+                    <Rate 
+                        character={<HeartFilled />} 
+                        count={1} 
+                        defaultValue={like}
+                        style={{color: mainColor}}
+                    />
+                </div>
+            : null}
+        </React.Fragment>
     );
 };
 
@@ -20,8 +41,10 @@ const CelebList = (props) => {
     const celebs = props.list ? props.list : [{url:'https://pbs.twimg.com/profile_images/912222837938589697/_OWluI2j_400x400.jpg'}, {url:'https://pbs.twimg.com/media/FufPaNIWwAMmApz?format=jpg'}];
     return (
         <React.Fragment>
-            {celebs.map(celeb => <Celeb url={celeb.url}/>)}
-            <Avatar size={80} icon={<PlusOutlined/>} style={defaultStyle}/>
+            {celebs.map(celeb => <CelebAvatar url={celeb.url}/>)}
+            <Link to={'/celeb'}>
+                <Avatar className="celeb-plus-button" size={80} icon={<PlusOutlined/>} style={defaultStyle}/>
+            </Link>
         </React.Fragment>
     );
 };
@@ -29,22 +52,28 @@ const CelebList = (props) => {
 const CelebSwiper = (props) => {
     const celebs = props.list ? props.list : [
         {
-            url:'https://pbs.twimg.com/profile_images/912222837938589697/_OWluI2j_400x400.jpg'
+            url:'https://pbs.twimg.com/profile_images/912222837938589697/_OWluI2j_400x400.jpg',
+            name: '비투비',
         }, 
         {
-            url:'https://pbs.twimg.com/media/FufPaNIWwAMmApz?format=jpg'
+            url:'https://pbs.twimg.com/media/FufPaNIWwAMmApz?format=jpg',
+            name: '육성재',
         }, 
         {
-            url:'https://pbs.twimg.com/profile_images/912222837938589697/_OWluI2j_400x400.jpg'
+            url:'https://pbs.twimg.com/profile_images/912222837938589697/_OWluI2j_400x400.jpg',
+            name: '비투비',
         }, 
         {
-            url:'https://pbs.twimg.com/media/FufPaNIWwAMmApz?format=jpg'
+            url:'https://pbs.twimg.com/media/FufPaNIWwAMmApz?format=jpg',
+            name: '육성재',
         }, 
         {
-            url:'https://pbs.twimg.com/profile_images/912222837938589697/_OWluI2j_400x400.jpg'
+            url:'https://pbs.twimg.com/profile_images/912222837938589697/_OWluI2j_400x400.jpg',
+            name: '비투비',
         }, 
         {
-            url:'https://pbs.twimg.com/media/FufPaNIWwAMmApz?format=jpg'
+            url:'https://pbs.twimg.com/media/FufPaNIWwAMmApz?format=jpg',
+            name: '육성재',
         }, 
     ];
     
@@ -54,13 +83,13 @@ const CelebSwiper = (props) => {
         spaceBetween={10}
         freeMode={true}
         modules={[FreeMode]}
-        className="mySwiper"
+        className="celeb-swiper"
         style={{height: 'auto'}}
         >
             {celebs.map(celeb => 
-                <SwiperSlide className="celeb-swiper-item"><Celeb url={celeb.url}/></SwiperSlide>
+                <SwiperSlide className="celeb-swiper-item"><CelebAvatar url={celeb.url} name={celeb.name}/></SwiperSlide>
             )}
-            <SwiperSlide className="celeb-swiper-item"><Avatar size={80} icon={<PlusOutlined/>} style={defaultStyle}/></SwiperSlide>
+            <SwiperSlide className="celeb-swiper-item"><Link to={'/celeb'}><Avatar className="celeb-plus-button" size={80} icon={<PlusOutlined/>} style={defaultStyle}/></Link></SwiperSlide>
         </Swiper>
     )
 }
@@ -94,4 +123,4 @@ const defaultStyle = {
     marginRight: '5px',
 };
 
-export { Celeb, CelebList, CelebSwiper, CelebFav }
+export { CelebAvatar, CelebList, CelebSwiper, CelebFav }
