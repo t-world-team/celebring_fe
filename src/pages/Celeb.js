@@ -4,12 +4,6 @@ import { CelebAvatar } from '../components/CelebItem';
 import { Anchor, Tabs } from 'antd';
 
 const Celeb = (props) => {
-    const topRef = React.useRef(null);
-    const [targetOffset, setTargetOffset] = useState();
-    useEffect(() => {
-        setTargetOffset(topRef.current?.clientHeight);
-    }, []);
-
     const celebs = props.list ? props.list : [
         {
             url:'https://pbs.twimg.com/profile_images/912222837938589697/_OWluI2j_400x400.jpg',
@@ -37,38 +31,10 @@ const Celeb = (props) => {
         }, 
     ];
 
-    const anchorItems = [
-        {
-            key: '1',
-            href: '#1',
-            title: 'ㄱ',
-        },
-        {
-            key: '2',
-            href: '#2',
-            title: 'ㄴ',
-        },
-        {
-            key: '3',
-            href: '#3',
-            title: 'ㄷ',
-        },
-        {
-            key: '4',
-            href: '#4',
-            title: 'ㄹ',
-        },
-        {
-            key: '5',
-            href: '#5',
-            title: 'ㅁ',
-        },
-        {
-            key: '6',
-            href: '#6',
-            title: 'ㅂ',
-        }
-    ];
+    const wordArray = ['ㄱ', 'ㄴ', 'ㄷ', 'ㄹ', 'ㅁ', 'ㅂ', 'ㅅ', 'ㅇ', 'ㅈ', 'ㅊ', 'ㅋ', 'ㅌ', 'ㅍ', 'ㅎ',
+                        'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'];
+
+    const anchorItems = wordArray.map(word => {return {key: word, href: '#' + word, title : word}});
 
     const tabItems = [
         {
@@ -76,51 +42,52 @@ const Celeb = (props) => {
             label: '그룹',
             children: 
                 <React.Fragment>
-                    <div style={{padding: 20}}>
+                    <div className="celeb-anchor">
                         <Anchor 
                             direction="horizontal" 
                             items={anchorItems} 
-                            offsetTop={50}
-                            targetOffset={targetOffset}
-                            style={{paddingTop: 30, background: '#fff'}}/>
+                            offsetTop={60}
+                            targetOffset={95}
+                            style={{ background: '#fff' }}
+                        />
                     </div>
-                    <div>
-                        <div className="celeb-items" id="1">
+                    <div style={{paddingTop: 20}}>
+                        <div className="celeb-items" id="ㄱ">
                             {celebs.map(celeb => 
                                 <div className="celeb-item">
                                     <CelebAvatar useLike={true} url={celeb.url} name={celeb.name}/>
                                 </div>
                             )}
                         </div>
-                        <div className="celeb-items" id="2">
+                        <div className="celeb-items" id="ㄴ">
                             {celebs.map(celeb => 
                                 <div className="celeb-item">
                                     <CelebAvatar useLike={true} url={celeb.url} name={celeb.name}/>
                                 </div>
                             )}
                         </div>
-                        <div className="celeb-items" id="3">
+                        <div className="celeb-items" id="ㄷ">
                             {celebs.map(celeb => 
                                 <div className="celeb-item">
                                     <CelebAvatar useLike={true} url={celeb.url} name={celeb.name}/>
                                 </div>
                             )}
                         </div>
-                        <div className="celeb-items" id="4">
+                        <div className="celeb-items" id="ㄹ">
                             {celebs.map(celeb => 
                                 <div className="celeb-item">
                                     <CelebAvatar useLike={true} url={celeb.url} name={celeb.name}/>
                                 </div>
                             )}
                         </div>
-                        <div className="celeb-items" id="5">
+                        <div className="celeb-items" id="ㅁ">
                             {celebs.map(celeb => 
                                 <div className="celeb-item">
                                     <CelebAvatar useLike={true} url={celeb.url} name={celeb.name}/>
                                 </div>
                             )}
                         </div>
-                        <div className="celeb-items" id="6">
+                        <div className="celeb-items" id="ㅂ">
                             {celebs.map(celeb => 
                                 <div className="celeb-item">
                                     <CelebAvatar useLike={true} url={celeb.url} name={celeb.name}/>
@@ -143,7 +110,7 @@ const Celeb = (props) => {
             <div className="celeb-title">
                 다양한 셀럽을 만나보세요
             </div>
-            <Tabs items={tabItems} ref={topRef}/>
+            <Tabs items={tabItems}/>
         </div>
     )
 }

@@ -3,8 +3,7 @@ html, body, #root, section {height: 100%; margin: 0; background-color: #fff!impo
 
 /* scroll style */
 *::-webkit-scrollbar { width: 0; }
-body {overflow: hidden;}
-.main {overflow: auto; height: 100%;}
+.main {height: 100%;}
 
 /* common */
 h1, h2, h3, h4, h5 {
