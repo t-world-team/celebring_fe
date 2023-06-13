@@ -1,8 +1,7 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, Redirect, Switch } from 'react-router-dom';
+import { Route, Routes, useLocation } from 'react-router-dom';
 import "./styles/style.scss";
 
-import Menu from "./components/Menu";
 import Main from './pages/Main';
 import Character from './pages/Character';
 import Event from './pages/Event';
@@ -10,50 +9,38 @@ import EventForm from './pages/EventForm';
 import MyPage from './pages/MyPage';
 import { LoginPage } from './pages/Login';
 import Celeb from './pages/Celeb';
+import Layout from './pages/Layout';
+import { AuthContext } from './contexts/auth-context';
+import { useAuth } from './hooks/login-hook';
 
 function App() {
+  let location = useLocation();
+  let backgroundLocation = location.state?.backgroundLocation;
+  const { token, login, logout} = useAuth();
+
   return (
-    <Router>
-      <header>
-        <div className="header-wrap">
-          <Menu/>
-        </div>
-      </header>
-      <div className="main">
-        <main>
-          <Switch>
-            <Route path="/main" exact>
-              <Main/>
-            </Route>
-            <Route path="/celeb" exact>
-              <Celeb/>
-            </Route>
-            <Route path="/character" exact>
-              <Character/>
-            </Route>
-            <Route path="/event" exact>
-              <Event/>
-            </Route>
-            <Route path="/event/form" exact>
-              <EventForm/>
-            </Route>
-            <Route path="/mypage" exact>
-              <MyPage/>
-            </Route>
-            <Route path="/login" exact>
-              <LoginPage/>
-            </Route>
-            <Redirect to="/main"/>
-          </Switch>
-        </main>
-        <footer>
-          <div>
-            <p>celebring</p>
-            <p>©2023</p>
-          </div>
-        </footer>
-      </div>
-    </Router>
+    <AuthContext.Provider
+      value={{
+        isLoggedIn: !!token,
+        token: token,
+        login: login,
+        logout: logout,
+      }}
+    >
+      <Routes location={backgroundLocation || location}>
+        <Route path="/" element={<Layout/>}>
+          <Route index element={<Main/>}/>
+          <Route path="/celeb" element={<Celeb/>} />
+          <Route path="/character" element={<Character/>} />
+          <Route path="/event" element={<Event/>} />
+          <Route path="/event/form" element={<EventForm/>} />
+          <Route path="/mypage" element={<MyPage/>} />
+        </Route>
+      </Routes>
+      <Routes>
+        <Route path="/login" element={<LoginPage/>} />
+      </Routes>
+    </AuthContext.Provider>
   );
 }
 

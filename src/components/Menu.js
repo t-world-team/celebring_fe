@@ -1,17 +1,20 @@
-import React from 'react';
+import React, { useContext } from 'react';
 
 import { Button, Drawer, Input, Modal } from 'antd';
 import { useState } from 'react';
 import { MenuOutlined, CloseOutlined, SmileOutlined, SearchOutlined, CalendarOutlined, CarryOutOutlined, UserOutlined } from '@ant-design/icons';
-import { Link } from 'react-router-dom';
+import { Link, Outlet, useLocation } from 'react-router-dom';
 import { CelebFav } from './CelebItem';
 import { LoginPage } from '../pages/Login';
+import { AuthContext } from '../contexts/auth-context';
 
 const logo = process.env.PUBLIC_URL + '/celebring.png';
 
 const Menu = () => {
+  let location = useLocation();
   const [menuOpen, setOpenMenu] = useState(false);
   const [searchOpen, setOpenSearch] = useState(false);
+  const auth = useContext(AuthContext);
   
   const showMenu = () => {
     setOpenMenu(true);
@@ -26,18 +29,14 @@ const Menu = () => {
     setOpenSearch(false);
   };
 
-  
-  const [loginOpen, setLoginOpen] = useState(false);
-
   const loginPopup = () => {
     setOpenMenu(false);
-    setLoginOpen(true);
   }
 
   return (
     <>
       <div className="logo">
-        <Link to={'/main'}>
+        <Link to={'/'}>
           <img src={logo} alt="logo" onClick={onClose}/>
         </Link>
       </div>
@@ -59,16 +58,13 @@ const Menu = () => {
         }}
       >
         <div className="login-list">
-          <h2 onClick={loginPopup} style={{marginLeft: 15, display: 'inline-block', marginBottom: 30}}>로그인</h2>
-          <Modal
-            centered
-            open={loginOpen}
-            onCancel={() => setLoginOpen(false)}
-            footer={null}
-            className="login-popup-wrap"
-          >
-            <LoginPage/>
-          </Modal>
+          {auth.isLoggedIn ? 
+          <h2 onClick={auth.logout} style={{cursor: 'pointer', marginLeft: 15, display: 'inline-block', marginBottom: 30}}>로그아웃</h2>
+          :
+          <Link to="/login" state={{backgroundLocation: location}}>
+            <h2 onClick={loginPopup} style={{marginLeft: 15, display: 'inline-block', marginBottom: 30}}>로그인</h2>
+          </Link>
+          }
         </div>
         <div className="menu-list">
           <div className="button-list">
