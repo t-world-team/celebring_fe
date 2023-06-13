@@ -269,6 +269,9 @@
     .detail-events {
         flex-grow: 1;
         flex-basis: 400px;
+        .detail-members {
+            margin: 10px 0;
+        }
         .detail-title {
             display: flex;
             h2, h3 {

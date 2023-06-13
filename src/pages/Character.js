@@ -4,9 +4,14 @@ import EventItem from '../components/EventItem';
 import { Button, Carousel } from 'antd';
 import { CalendarOutlined, UnorderedListOutlined } from '@ant-design/icons';
 import CalendarItem from '../components/CalendarItem';
+import { useParams } from 'react-router-dom';
+import { CelebSwiper } from '../components/CelebItem';
 
 const Character = (props) => {
     const [viewList, setViewList] = useState(true);
+    const params = useParams();
+    const group = params.id === 'btob' ? true : false;
+
     return (
         <div className="detail">
             <div className="detail-header">
@@ -19,6 +24,7 @@ const Character = (props) => {
                 </div>
             </div>
             <div className="detail-events">
+                {group && <div className="detail-members"><CelebSwiper addPlus={false}/></div>}
                 <div className="detail-title">
                     <h2>(그룹명) 이벤트 리스트</h2>
                     <div className="button-group">

@@ -31,7 +31,7 @@ function App() {
         <Route path="/" element={<Layout/>}>
           <Route index element={<Main/>}/>
           <Route path="/celeb" element={<Celeb/>} />
-          <Route path="/character" element={<Character/>} />
+          <Route path="/character/:id" element={<Character/>} />
           <Route path="/event" element={<Event/>} />
           <Route path="/event/form" element={<EventForm/>} />
           <Route path="/mypage" element={<MyPage/>} />

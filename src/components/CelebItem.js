@@ -12,12 +12,13 @@ const mainColor = process.env.REACT_APP_MAIN_COLOR;
 const CelebAvatar = (props) => {
     const url = props.url ? props.url : 'https://pbs.twimg.com/profile_images/912222837938589697/_OWluI2j_400x400.jpg';
     const name = props.name ? props.name : '비투비';
+    const id = props.id ? props.id : null;
     const useLike = props.useLike != null ? props.useLike : false;
     const like = props.like ? props.like : 1;
 
     return (
         <React.Fragment>
-            <Link to={'/character'}>
+            <Link to={`/character/${id}`}>
                 <div className="celeb-avatar">
                     <Avatar size={80} src={url} style={defaultStyle}></Avatar>
                     <span className="celeb-name">{name}</span>
@@ -50,30 +51,37 @@ const CelebList = (props) => {
 };
 
 const CelebSwiper = (props) => {
+    const addPlus = props.addPlus != null ? props.addPlus : true;
     const celebs = props.list ? props.list : [
         {
             url:'https://pbs.twimg.com/profile_images/912222837938589697/_OWluI2j_400x400.jpg',
             name: '비투비',
+            id: 'btob',
         }, 
         {
             url:'https://pbs.twimg.com/media/FufPaNIWwAMmApz?format=jpg',
             name: '육성재',
+            id: 'ysj',
         }, 
         {
             url:'https://pbs.twimg.com/profile_images/912222837938589697/_OWluI2j_400x400.jpg',
             name: '비투비',
+            id: 'btob',
         }, 
         {
             url:'https://pbs.twimg.com/media/FufPaNIWwAMmApz?format=jpg',
             name: '육성재',
+            id: 'ysj',
         }, 
         {
             url:'https://pbs.twimg.com/profile_images/912222837938589697/_OWluI2j_400x400.jpg',
             name: '비투비',
+            id: 'btob',
         }, 
         {
             url:'https://pbs.twimg.com/media/FufPaNIWwAMmApz?format=jpg',
             name: '육성재',
+            id: 'ysj',
         }, 
     ];
     
@@ -87,9 +95,11 @@ const CelebSwiper = (props) => {
         style={{height: 'auto'}}
         >
             {celebs.map(celeb => 
-                <SwiperSlide className="celeb-swiper-item"><CelebAvatar url={celeb.url} name={celeb.name}/></SwiperSlide>
+                <SwiperSlide className="celeb-swiper-item"><CelebAvatar url={celeb.url} name={celeb.name} id={celeb.id}/></SwiperSlide>
             )}
-            <SwiperSlide className="celeb-swiper-item"><Link to={'/celeb'}><Avatar className="celeb-plus-button" size={80} icon={<PlusOutlined/>} style={defaultStyle}/></Link></SwiperSlide>
+            {addPlus && 
+                <SwiperSlide className="celeb-swiper-item"><Link to={'/celeb'}><Avatar className="celeb-plus-button" size={80} icon={<PlusOutlined/>} style={defaultStyle}/></Link></SwiperSlide>
+            }
         </Swiper>
     )
 }
