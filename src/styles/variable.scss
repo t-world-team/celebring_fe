@@ -4,8 +4,9 @@ $height-footer: 95px;
 $height-main: calc(100% - #{$height-footer});
 
 /* color */
-$color-main: yellowgreen;
+$color-main: #ff9800;
 $color-default: #000;
+$color-light: lighten($color-main, 20%);
 
 /* responsive web size */
 $max-width: 600px;

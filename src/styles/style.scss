@@ -1,6 +1,7 @@
 @import url(../fonts/font.css);
 @import "./variable.scss";
 @import "./common.scss";
+@import "./color.scss";
 
 /* antD */
 .site-layout-content {
@@ -38,6 +39,74 @@
     }
 }
 
+/* celeb */
+.celeb-plus-button {
+    background-color: $color-main;
+}
+.celeb-avatar {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    span {
+        margin-right: 0!important;
+    }
+    .celeb-name {
+        font-size: $font-s;
+        margin: 5px 0;
+    }
+}
+.celeb-swiper {
+    .swiper-wrapper {
+        gap: 10px;
+        * {
+            margin-right: 0!important;
+        }
+    }
+}
+.celeb-list-wrap {
+    .celeb-title {
+        margin: 10px 0 30px;
+        font-size: $font-l;
+        font-weight: 600;
+    }
+    .celeb-items {
+        display: flex;
+        flex-wrap: wrap;
+        margin: auto;
+        width: 550px;
+        @media(max-width: 550px) {
+            width: 440px;
+        }
+        @media(max-width: 440px) {
+            width: 330px;
+        }
+        @media(max-width: 330px) {
+            width: 220px;
+        }
+        .celeb-item {
+            flex-basis: 110px;
+            justify-content: center;
+            position: relative;
+        }
+    }
+}
+.celeb-like {
+    display: inline-block;
+    position: absolute;
+    top: -5px;
+    right: 5px;
+    margin: 5px;
+    .ant-rate {
+        font-size: 25px;
+    }
+    ul, li, div {
+        display: flex;
+    }
+}
+.celeb-anchor {
+    padding: 0 20px;
+}
+
 /* event */
 .event-component {
     display: flex;
@@ -56,7 +125,7 @@
         }
     }
     .event-content {
-        margin: auto 10px;
+        //margin: auto 10px;
         flex-grow: 1;
         .event-title {
             display: block;
@@ -200,6 +269,9 @@
     .detail-events {
         flex-grow: 1;
         flex-basis: 400px;
+        .detail-members {
+            margin: 10px 0;
+        }
         .detail-title {
             display: flex;
             h2, h3 {

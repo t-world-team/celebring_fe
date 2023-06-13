@@ -1,0 +1,12 @@
+.celeb-avatar:hover {
+    color: $color-light;
+}
+
+
+.ant-tabs .ant-tabs-tab:hover
+, .ant-tabs .ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn {
+    color: $color-main!important;
+}
+.ant-tabs .ant-tabs-ink-bar {
+    background-color: $color-main;
+}
