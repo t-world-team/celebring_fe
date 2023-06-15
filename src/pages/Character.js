@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 import EventItem from '../components/EventItem';
 
 import { Button, Carousel } from 'antd';
@@ -9,8 +10,22 @@ import { CelebSwiper } from '../components/CelebItem';
 
 const Character = (props) => {
     const [viewList, setViewList] = useState(true);
+    const [eventList, setEventList] = useState();
     const params = useParams();
-    const group = params.id === 'btob' ? true : false;
+    const group = params.id === '2' ? true : false;  // 바꿔야함
+
+    const getEvent = (key) => {
+        return eventList[key];
+    }
+
+    useEffect(() => {
+        axios.get(`${process.env.REACT_APP_API_URL}/events/${params.id}?page=0`)
+            .then((res) => res.data)
+            .then((data) => {
+                if (!data.empty) setEventList(data.content)
+            })
+            .catch((error) => console.log(error));  
+    }, []);
 
     return (
         <div className="detail">
@@ -36,10 +51,17 @@ const Character = (props) => {
                 </div>
                 {viewList ? 
                     <React.Fragment>
-                        <EventItem/>
-                        <EventItem/>
-                        <EventItem/>
-                        <EventItem/>
+                        { eventList ? Object.keys(eventList).map((key) => {
+                            return (
+                                <EventItem 
+                                    id =  {`${getEvent(key).eventId}`}
+                                    title = {`${getEvent(key).eventName}`}
+                                    date = {`${getEvent(key).startDate}~${getEvent(key).endDate}`}
+                                    location = {`${getEvent(key).address}(${getEvent(key).cafeName})`}
+                                    celebs = {`${getEvent(key).celeb}`}
+                                />
+                            )
+                        }) : <div>이벤트가 존재하지 않습니다.</div>}
                     </React.Fragment> :
                     <React.Fragment>
                         <CalendarItem/>
