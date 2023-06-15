@@ -32,7 +32,7 @@ function App() {
           <Route index element={<Main/>}/>
           <Route path="/celeb" element={<Celeb/>} />
           <Route path="/character/:id" element={<Character/>} />
-          <Route path="/event" element={<Event/>} />
+          <Route path="/event/:id" element={<Event/>} />
           <Route path="/event/form" element={<EventForm/>} />
           <Route path="/mypage" element={<MyPage/>} />
         </Route>

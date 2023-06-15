@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom';
 
 const EventItem = (props) => {
     let thumbnail = props.thumbnail ? props.thumbnail : 'https://pbs.twimg.com/media/FvFhOr5aYAAA88w?format=jpg';
+    let id = props.id ? props.id : 1;
     let title = props.title ? props.title : '이벤트명입니다. 생일카페 이벤트명입니다.';
     let date = props.date ? props.date : '23.11.01 ~ 23.11.03';
     let location = props.location ? props.location : '장소(카페상호명)';
@@ -15,7 +16,7 @@ const EventItem = (props) => {
 
     return (
         <div className="event-component">
-            <Link to={'/event'}>
+            <Link to={`/event/${id}`}>
                 {/* <div className="event-image">
                     <img src={thumbnail} alt="thumbnail"/>
                 </div> */}
