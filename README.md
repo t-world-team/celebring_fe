@@ -1,4 +1,8 @@
 # celebring front end
+
+## 버전
+* Nodejs 16
+
 ## Packages
 * Util
   * react router dom
