@@ -90,7 +90,7 @@ const Celeb = (props) => {
                                 <React.Fragment>
                                     {solo.list.map((celeb, index) => 
                                         <div className="celeb-item" id={index === 0 ? `solo${solo.key}` : null}>
-                                            <CelebAvatar useLike={true} url={celeb.profileImage} name={celeb.name}/>
+                                            <CelebAvatar useLike={true} url={celeb.profileImage} name={celeb.name} id={celeb.id} like={celeb.like}/>
                                         </div>
                                     )} 
                                 </React.Fragment>
