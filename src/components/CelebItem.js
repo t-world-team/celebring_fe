@@ -1,20 +1,59 @@
-import React from 'react';
+import React, { useContext, useState } from 'react';
 
 import { HeartFilled } from '@ant-design/icons';
-import { Avatar, Rate } from 'antd';
+import { Avatar, Rate, message } from 'antd';
 import { PlusOutlined, StarFilled } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { FreeMode } from 'swiper';
+import { AuthContext } from '../contexts/auth-context';
+import axios from 'axios';
 
 const mainColor = process.env.REACT_APP_MAIN_COLOR;
 
 const CelebAvatar = (props) => {
+    const auth = useContext(AuthContext);
     const url = props.url ? props.url : 'https://pbs.twimg.com/profile_images/912222837938589697/_OWluI2j_400x400.jpg';
     const name = props.name ? props.name : '비투비';
     const id = props.id ? props.id : null;
     const useLike = props.useLike != null ? props.useLike : false;
-    const like = props.like ? props.like : 1;
+    const like = props.like ? props.like : 0;
+
+    const [likeCount, setLikeCount] = useState(like);
+
+    const toggleCelebLike = (number) => {
+        if(auth.isLoggedIn) {
+            likeCeleb(number > 0 ? true : false);
+        } else {
+            message.warning('로그인이 필요합니다.');
+            setLikeCount(0);
+        }
+    }
+
+    const likeCeleb = async (bLike) => {
+        let likeUrlPath = bLike ? 'like' : 'dislike';
+        let likeMethod = bLike ? 'POST' : 'DELETE';
+
+        axios({
+            method: likeMethod,
+            url: `${process.env.REACT_APP_API_URL}/celeb/${likeUrlPath}`,
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${auth.token}`,
+            },
+            data: JSON.stringify({celebId: id})
+        })
+        .then((response) => response.status)
+        .then((status) => {
+            if(status === 200) {
+                setLikeCount(bLike ? 1 : 0);
+            }
+        })
+        .catch((error) => {
+            setLikeCount(bLike ? 0 : 1);
+            message.warning('오류가 발생했습니다.');
+        });
+    }
 
     return (
         <React.Fragment>
@@ -29,8 +68,10 @@ const CelebAvatar = (props) => {
                     <Rate 
                         character={<HeartFilled />} 
                         count={1} 
+                        value={likeCount}
                         defaultValue={like}
                         style={{color: mainColor}}
+                        onChange={toggleCelebLike}
                     />
                 </div>
             : null}
