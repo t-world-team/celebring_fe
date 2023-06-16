@@ -7,8 +7,10 @@ import { CalendarOutlined, UnorderedListOutlined } from '@ant-design/icons';
 import CalendarItem from '../components/CalendarItem';
 import { useParams } from 'react-router-dom';
 import { CelebSwiper } from '../components/CelebItem';
+import { EventSkeleton } from '../components/SkeletonItem';
 
 const Character = (props) => {
+    const [isLoad, setIsLoad] = useState(false);
     const [viewList, setViewList] = useState(true);
     const [eventList, setEventList] = useState();
     const params = useParams();
@@ -25,6 +27,8 @@ const Character = (props) => {
                 if (!data.empty) setEventList(data.content)
             })
             .catch((error) => console.log(error));  
+        
+        setIsLoad(true);
     }, []);
 
     return (
@@ -51,17 +55,20 @@ const Character = (props) => {
                 </div>
                 {viewList ? 
                     <React.Fragment>
-                        { eventList ? Object.keys(eventList).map((key) => {
-                            return (
-                                <EventItem 
-                                    id =  {`${getEvent(key).eventId}`}
-                                    title = {`${getEvent(key).eventName}`}
-                                    date = {`${getEvent(key).startDate}~${getEvent(key).endDate}`}
-                                    location = {`${getEvent(key).address}(${getEvent(key).cafeName})`}
-                                    celebs = {`${getEvent(key).celeb}`}
-                                />
-                            )
-                        }) : <div>이벤트가 존재하지 않습니다.</div>}
+                        { isLoad ? 
+                        <>
+                            { eventList ? Object.keys(eventList).map((key) => {
+                                return (
+                                    <EventItem 
+                                        id =  {`${getEvent(key).eventId}`}
+                                        title = {`${getEvent(key).eventName}`}
+                                        date = {`${getEvent(key).startDate}~${getEvent(key).endDate}`}
+                                        location = {`${getEvent(key).address}(${getEvent(key).cafeName})`}
+                                        celebs = {`${getEvent(key).celeb}`}
+                                    />
+                                )
+                            }) : <div>이벤트가 존재하지 않습니다.</div>}
+                        </> : <EventSkeleton /> }
                     </React.Fragment> :
                     <React.Fragment>
                         <CalendarItem/>
