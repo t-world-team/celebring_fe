@@ -1,40 +1,48 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 
 import { Avatar, Button, Popover, Rate } from 'antd';
-import { EnvironmentOutlined, CalendarOutlined, TwitterOutlined, HeartFilled, EditOutlined, DeleteOutlined, ZoomInOutlined } from '@ant-design/icons';
+import { EnvironmentOutlined, CalendarOutlined, ClockCircleOutlined, HeartFilled, EditOutlined, DeleteOutlined, ZoomInOutlined } from '@ant-design/icons';
+import { TwitterTweetEmbed } from 'react-twitter-embed';
 import { AfterWordList } from '../components/AfterwordItem';
 import PanelItem from '../components/PanelItem';
 import ShareBoxLineIcon from 'remixicon-react/ShareBoxLineIcon';
 import More2FillIcon from 'remixicon-react/More2FillIcon';
+import { useParams } from 'react-router-dom';
+
+const mainColor = process.env.REACT_APP_MAIN_COLOR;
 
 const Event = (props) => {
-    const url = props.url ? props.url : 'https://pbs.twimg.com/profile_images/912222837938589697/_OWluI2j_400x400.jpg';
-    let title = props.title ? props.title : '이벤트명입니다. 이벤트명입니다. 이벤트명입니다. 이벤트명입니다. ';
-    let date = props.date ? props.date : '2023.11.01 ~ 2023.11.03';
-    let location = props.location ? props.location : '장소(카페상호명)';
+    const params = useParams();
+    const [event, setEvent] = useState();
     let writer = props.writer ? props.writer : true;
+
+    useEffect(() => {
+        axios.get(`${process.env.REACT_APP_API_URL}/events/detail/${params.id}`)
+            .then((res) => res.data)
+            .then((data) => {
+                if (!data.empty) setEvent(data);
+                console.log(data)
+            })
+            .catch((error) => console.log(error));
+    }, []);
 
     return (
         <div className="detail">
-            <div className="detail-icon">
-                <Button type="text" shape="circle" icon={<ShareBoxLineIcon/>}/>
-                <Rate 
-                    character={<HeartFilled />} 
-                    count={1} 
-                    defaultValue={0}
-                    style={{fontSize: 24, color: 'red'}}
-                />
-            </div>
-            <div className="detail-header">
-                <div className="header-image-centered">
-                    <img src="https://pbs.twimg.com/media/FufPZXnWcAYo04i?format=jpg" alt="YookSungJae"/>
-                </div>
-            </div>
             <div className="detail-body">
                 <div className="detail-profile">
-                    <Avatar size={100} src={url}></Avatar>
                     <div className="detail-title">
-                        <h3>{title}</h3>
+                        <h3>{event?event.eventName : '이벤트명입니다.'}</h3>
+                    </div>
+                    <div className="detail-btn">
+                        <Rate 
+                            character={<HeartFilled />} 
+                            count={1} 
+                            defaultValue={0}
+                            value={event&&event.liked}
+                            style={{fontSize: 24, color: mainColor}}
+                            onChange={(key) => { alert(key) }}
+                        />
                         {writer ?
                         <Popover placement="bottomRight" content={
                             <React.Fragment>
@@ -49,20 +57,21 @@ const Event = (props) => {
                     </div>
                 </div>
                 <div className="detail-event">
-                    <p className="event-date"><CalendarOutlined/> {date}</p>
+                    <p className="event-date"><CalendarOutlined/> {event?`${event.startDate} ~ ${event.endDate}` : '2023.11.01 ~ 2023.11.03'}</p>
                     <div className="event-location">
-                        <span><EnvironmentOutlined/> {location}</span>
+                        <span><EnvironmentOutlined/> {event? `${event.address}(${event.cafeName})`: '장소(카페상호명)'}</span>
                         <Button type="default"><ZoomInOutlined/> 지도 보기</Button>
                     </div>
-                    <p><TwitterOutlined/> SNS 링크</p>
+                    <p><ClockCircleOutlined /> {event?event.openingTime : '09:00 ~ 20:00'}</p>
                 </div>
                 <div className="detail-contents">
-                    <PanelItem/>
+                    {/* <PanelItem/> */}
+                    { event && <TwitterTweetEmbed tweetId={event&&event.twitter} /> }
                 </div>
-                <div className="detail-after">
+                {/* <div className="detail-after">
                     <h4>후기를 입력하세요</h4>
                     <AfterWordList />
-                </div>
+                </div> */}
             </div>
         </div>
     );
