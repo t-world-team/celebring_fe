@@ -4,9 +4,11 @@ import axios from 'axios';
 import Swiper from "../components/SwiperItem";
 import { CelebList, CelebSwiper } from '../components/CelebItem';
 import EventItem from '../components/EventItem';
+import { EventSkeleton } from '../components/SkeletonItem';
 import { useParams } from 'react-router-dom';
 
 const Main = () => {
+    const [isLoad, setIsLoad] = useState(false);
     const [eventList, setEventList] = useState();
 
     const getEvent = (key) => {
@@ -20,6 +22,8 @@ const Main = () => {
                 if (!data.empty) setEventList(data.content)
             })
             .catch((error) => console.log(error));  
+
+        setIsLoad(true);
     }, []);
 
     return (
@@ -30,18 +34,21 @@ const Main = () => {
                 <CelebSwiper/>
             </div>
             <div className="list-event">
-                <h3>타이틀을 입력하세요</h3>
-                { eventList ? Object.keys(eventList).map((key) => {
-                    return (
-                        <EventItem 
-                            id =  {`${getEvent(key).eventId}`}
-                            title = {`${getEvent(key).eventName}`}
-                            date = {`${getEvent(key).startDate}~${getEvent(key).endDate}`}
-                            location = {`${getEvent(key).address}(${getEvent(key).cafeName})`}
-                            celebs = {`${getEvent(key).celeb}`}
-                        />
-                    )
-                }) : <div>이벤트가 존재하지 않습니다.</div>}
+                <h3>지금 뜨는 이벤트</h3>
+                { isLoad ? 
+                <>
+                    { eventList ? Object.keys(eventList).map((key) => {
+                        return (
+                            <EventItem 
+                                id =  {`${getEvent(key).eventId}`}
+                                title = {`${getEvent(key).eventName}`}
+                                date = {`${getEvent(key).startDate}~${getEvent(key).endDate}`}
+                                location = {`${getEvent(key).address}(${getEvent(key).cafeName})`}
+                                celebs = {`${getEvent(key).celeb}`}
+                            />
+                        )
+                    }) : <div>이벤트가 존재하지 않습니다.</div>}
+                </> : <EventSkeleton /> }
             </div>
         </React.Fragment>
     );
