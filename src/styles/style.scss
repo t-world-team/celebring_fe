@@ -103,9 +103,6 @@
         display: flex;
     }
 }
-.celeb-anchor {
-    padding: 0 20px;
-}
 
 /* event */
 .event-component {
@@ -507,6 +504,45 @@
     height: 100%; 
     .ant-modal-content {
         height: 100%;
+    }
+}
+
+.event-skeleton {
+    width: 70%;
+    * {
+        margin: 0;
+    }
+    .ant-skeleton-title {
+        height: 20px!important;
+        width: 70%!important;
+    }
+    .ant-skeleton-paragraph {
+        margin-block-start: 7px!important;
+        li {
+            height: 12px!important;
+            border-radius: 2px!important;
+        }
+        >li +li {
+            margin-block-start: 5px!important;
+        }
+    }
+}
+.avatar-skeleton {
+    display: flex;
+    flex-direction: column;
+    div {
+        display: inline-block;
+        width: 80px!important;
+    }
+    .ant-skeleton-avatar {
+        width: 80px!important;
+        height: 80px!important;
+    }
+    .ant-skeleton-paragraph {
+        margin: 5px 0 3px!important;
+        li {
+            margin: auto;
+        }
     }
 }
 
