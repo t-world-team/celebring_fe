@@ -1,30 +1,73 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import axios from 'axios';
 
-import { Avatar, Button, Popover, Rate } from 'antd';
+import { Button, Popover, Rate, message } from 'antd';
 import { EnvironmentOutlined, CalendarOutlined, ClockCircleOutlined, HeartFilled, EditOutlined, DeleteOutlined, ZoomInOutlined } from '@ant-design/icons';
 import { TwitterTweetEmbed } from 'react-twitter-embed';
-import { AfterWordList } from '../components/AfterwordItem';
-import PanelItem from '../components/PanelItem';
-import ShareBoxLineIcon from 'remixicon-react/ShareBoxLineIcon';
 import More2FillIcon from 'remixicon-react/More2FillIcon';
 import { useParams } from 'react-router-dom';
+import { AuthContext } from '../contexts/auth-context';
 
 const mainColor = process.env.REACT_APP_MAIN_COLOR;
 
 const Event = (props) => {
+    const auth = useContext(AuthContext);
     const params = useParams();
     const [event, setEvent] = useState();
+    const [likeCount, setLikeCount] = useState();
     let writer = props.writer ? props.writer : true;
 
+    const toggleEventLike = (number) => {
+        if (auth.isLoggedIn) {
+            likeEvent(number > 0 ? true : false);
+        } else {
+            message.warning('로그인이 필요합니다.');
+            setLikeCount(0);
+        }
+    }
+
+    const likeEvent = async (bLike) => {
+        let likeMethod = bLike ? 'POST' : 'DELETE';
+        
+        axios({
+            method: likeMethod,
+            url: `${process.env.REACT_APP_API_URL}/events/likes`, 
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${auth.token}`,
+            },
+            data: JSON.stringify({eventId: params.id})
+        })
+        .then((res) => res.status)
+        .then((status) => {
+            if(status === 200) {
+                setLikeCount(bLike ? 1 : 0);
+            }
+        })
+        .catch((error) => {
+            setLikeCount(bLike ? 0 : 1);
+            message.warning('오류가 발생했습니다.');
+        });
+    }
+
     useEffect(() => {
-        axios.get(`${process.env.REACT_APP_API_URL}/events/detail/${params.id}`)
-            .then((res) => res.data)
-            .then((data) => {
-                if (!data.empty) setEvent(data);
-                console.log(data)
-            })
-            .catch((error) => console.log(error));
+        axios({
+            method: 'GET',
+            url: `${process.env.REACT_APP_API_URL}/events/detail/${params.id}`, 
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${auth.token}`,
+            }
+        })
+        .then((res) => res.data)
+        .then((data) => {
+            if (!data.empty) {
+                setEvent(data);
+                setLikeCount(data.liked);
+            }
+        })
+        .catch((error) => console.log(error));
+            
     }, []);
 
     return (
@@ -39,9 +82,9 @@ const Event = (props) => {
                             character={<HeartFilled />} 
                             count={1} 
                             defaultValue={0}
-                            value={event&&event.liked}
+                            value={likeCount}
                             style={{fontSize: 24, color: mainColor}}
-                            onChange={(key) => { alert(key) }}
+                            onChange={toggleEventLike}
                         />
                         {writer ?
                         <Popover placement="bottomRight" content={
