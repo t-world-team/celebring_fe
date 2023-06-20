@@ -4,19 +4,21 @@ import { CelebAvatar } from '../components/CelebItem';
 import { Anchor, Tabs, message } from 'antd';
 import axios from 'axios';
 import { AuthContext } from '../contexts/auth-context';
+import { AvatarSkeletonList } from '../components/SkeletonItem';
 
 let groupCelebList;
 let soloCelebList;
 
 const Celeb = (props) => {
-    const [getCeleb, setGetCeleb] = useState(false);
     const auth = useContext(AuthContext);
     const header = auth.isLoggedIn ? {
                         'Content-Type': 'application/json',
                         Authorization: `Bearer ${auth.token}`,
                     } : null;
+    const [isLoad, setIsLoad] = useState(false);
 
     useEffect(() => {
+        setIsLoad(false);
         axios({
             method: 'get',
             url: `${process.env.REACT_APP_API_URL}/celeb/list/consonant`,
@@ -25,14 +27,16 @@ const Celeb = (props) => {
         .then((response) => response.data)
         .then((data) => {
             if(data !== null) {
-                console.log(data);
                 groupCelebList = data.group;
                 soloCelebList = data.solo;
-                setGetCeleb(true);
+                setIsLoad(true);
             }
         })
-        .catch((error) => message.warning('오류가 발생했습니다.'));
-    }, [getCeleb]);
+        .catch((error) => {
+            message.warning('오류가 발생했습니다.')
+            setIsLoad(true);
+        });
+    }, []);
 
     const wordArray = ['ㄱ', 'ㄴ', 'ㄷ', 'ㄹ', 'ㅁ', 'ㅂ', 'ㅅ', 'ㅇ', 'ㅈ', 'ㅊ', 'ㅋ', 'ㅌ', 'ㅍ', 'ㅎ',
                         'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', '기타'];
@@ -57,15 +61,18 @@ const Celeb = (props) => {
                     </div>
                     <div style={{paddingTop: 20}}>
                         <div className="celeb-items">
-                            {getCeleb && groupCelebList.map(group => 
-                                <React.Fragment>
-                                    {group.list.map((celeb, index) => 
-                                        <div className="celeb-item" id={index === 0 ? `group${group.key}` : null}>
-                                            <CelebAvatar useLike={true} url={celeb.profileImage} name={celeb.name} id={celeb.id} like={celeb.like}/>
-                                        </div>
-                                    )}
-                                </React.Fragment>
-                            )}
+                            {isLoad ? 
+                                groupCelebList.map(group => 
+                                    <React.Fragment>
+                                        {group.list.map((celeb, index) => 
+                                            <div className="celeb-item" id={index === 0 ? `group${group.key}` : null}>
+                                                <CelebAvatar useLike={true} url={celeb.profileImage} name={celeb.name} id={celeb.id} like={celeb.like}/>
+                                            </div>
+                                        )}
+                                    </React.Fragment>
+                                )
+                                : <AvatarSkeletonList count={12}/>
+                            }
                         </div>    
                     </div>
                 </React.Fragment>,
@@ -86,15 +93,18 @@ const Celeb = (props) => {
                     </div>
                     <div style={{paddingTop: 20}}>
                         <div className="celeb-items">
-                            {getCeleb && soloCelebList.map(solo => 
-                                <React.Fragment>
-                                    {solo.list.map((celeb, index) => 
-                                        <div className="celeb-item" id={index === 0 ? `solo${solo.key}` : null}>
-                                            <CelebAvatar useLike={true} url={celeb.profileImage} name={celeb.name} id={celeb.id} like={celeb.like}/>
-                                        </div>
-                                    )} 
-                                </React.Fragment>
-                            )}
+                            {isLoad ?
+                                soloCelebList.map(solo => 
+                                    <React.Fragment>
+                                        {solo.list.map((celeb, index) => 
+                                            <div className="celeb-item" id={index === 0 ? `solo${solo.key}` : null}>
+                                                <CelebAvatar useLike={true} url={celeb.profileImage} name={celeb.name} id={celeb.id} like={celeb.like}/>
+                                            </div>
+                                        )} 
+                                    </React.Fragment>
+                                )
+                                : <AvatarSkeletonList count={12}/>
+                            }
                         </div>
                     </div>
                 </React.Fragment>,
