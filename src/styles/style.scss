@@ -527,6 +527,24 @@
         }
     }
 }
+.avatar-skeleton-list {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+}
+.list-celeb {
+    .avatar-skeleton {
+        display: inline-flex;
+        margin-right: 10px;
+    }
+}
+.celeb-items {
+    .avatar-skeleton {
+        flex-basis: 110px;
+        align-items: center;
+        height: 110px;
+    }
+}
 .avatar-skeleton {
     display: flex;
     flex-direction: column;
