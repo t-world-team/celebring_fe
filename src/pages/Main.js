@@ -1,13 +1,15 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import axios from 'axios';
 
 import Swiper from "../components/SwiperItem";
-import { CelebList, CelebSwiper } from '../components/CelebItem';
+import { CelebSwiper } from '../components/CelebItem';
 import EventItem from '../components/EventItem';
-import { EventSkeleton } from '../components/SkeletonItem';
-import { useParams } from 'react-router-dom';
+import { AvatarSkeletonList, EventSkeleton } from '../components/SkeletonItem';
+import { AuthContext } from '../contexts/auth-context';
+import { message } from 'antd';
 
 const Main = () => {
+    const auth = useContext(AuthContext);
     const [isLoad, setIsLoad] = useState(false);
     const [eventList, setEventList] = useState();
 
@@ -26,12 +28,43 @@ const Main = () => {
         setIsLoad(true);
     }, []);
 
+    const [celebList, setCelebList] = useState([]);
+    const [celebLoad, setCelebLoad] = useState(false);
+
+    useEffect(() => {
+        setCelebLoad(false);
+        if(auth.token) {
+            axios({
+                method: 'get',
+                url: `${process.env.REACT_APP_API_URL}/celeb/favorite`,
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${auth.token}`,
+                },
+            })
+            .then((response) => response.data)
+            .then((data) => {
+                if(data !== null) {
+                    setCelebList(data);
+                    setCelebLoad(true);
+                }
+            })
+            .catch((error) => {
+                message.warning('오류가 발생했습니다.')
+                setCelebLoad(true);
+            });
+        }
+    }, [auth]);
+
     return (
         <React.Fragment>
             <Swiper/>
             <div className="list-celeb">
                 <h3>타이틀을 입력하세요</h3>
-                <CelebSwiper/>
+                { !auth.isLoggedIn || celebLoad ?
+                    <CelebSwiper list={auth.isLoggedIn ? celebList : null}/>
+                : <AvatarSkeletonList count={3}/>
+                }
             </div>
             <div className="list-event">
                 <h3>지금 뜨는 이벤트</h3>

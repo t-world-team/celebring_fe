@@ -18,6 +18,8 @@ const CelebAvatar = (props) => {
     const id = props.id ? props.id : null;
     const useLike = props.useLike != null ? props.useLike : false;
     const like = props.like ? props.like : 0;
+    const group = props.group != null ? props.group : false;
+    const groupName = props.groupName ? props.groupName : '';
 
     const [likeCount, setLikeCount] = useState(like);
 
@@ -60,7 +62,7 @@ const CelebAvatar = (props) => {
             <Link to={`/character/${id}`}>
                 <div className="celeb-avatar">
                     <Avatar size={80} src={url} style={defaultStyle}></Avatar>
-                    <span className="celeb-name">{name}</span>
+                    <span className="celeb-name">{name}{group && groupName ? `(${groupName})` : null}</span>
                 </div>
             </Link>
             {useLike ?
@@ -93,47 +95,7 @@ const CelebList = (props) => {
 
 const CelebSwiper = (props) => {
     const addPlus = props.addPlus != null ? props.addPlus : true;
-    const celebs = props.list ? props.list : [
-        {
-            url:'https://pbs.twimg.com/profile_images/912222837938589697/_OWluI2j_400x400.jpg',
-            name: '비투비',
-            id: '1',
-            group: true,
-        }, 
-        {
-            url:'https://pbs.twimg.com/media/FufPaNIWwAMmApz?format=jpg',
-            name: '육성재',
-            id: '2',
-            celeb: '1',
-            group: false,
-        }, 
-        {
-            url:'https://pbs.twimg.com/profile_images/912222837938589697/_OWluI2j_400x400.jpg',
-            name: '비투비',
-            id: '1',
-            group: true,
-        }, 
-        {
-            url:'https://pbs.twimg.com/media/FufPaNIWwAMmApz?format=jpg',
-            name: '육성재',
-            id: '2',
-            celeb: '1',
-            group: false,
-        }, 
-        {
-            url:'https://pbs.twimg.com/profile_images/912222837938589697/_OWluI2j_400x400.jpg',
-            name: '비투비',
-            id: '1',
-            group: true,
-        }, 
-        {
-            url:'https://pbs.twimg.com/media/FufPaNIWwAMmApz?format=jpg',
-            name: '육성재',
-            id: '2',
-            celeb: '1',
-            group: false,
-        }, 
-    ];
+    const celebs = props.list ? props.list : [];
     
     return (
       <Swiper
@@ -145,10 +107,10 @@ const CelebSwiper = (props) => {
         style={{height: 'auto'}}
         >
             {celebs.map(celeb => 
-                <SwiperSlide className="celeb-swiper-item"><CelebAvatar url={celeb.url} name={celeb.name} id={celeb.id} group={celeb.group}/></SwiperSlide>
+                <SwiperSlide className="celeb-swiper-item"><CelebAvatar url={celeb.profileImage} name={celeb.name} id={celeb.id} group={true} groupName={celeb.groupName}/></SwiperSlide>
             )}
             {addPlus && 
-                <SwiperSlide className="celeb-swiper-item"><Link to={'/celeb'}><Avatar className="celeb-plus-button" size={80} icon={<PlusOutlined/>} style={defaultStyle}/></Link></SwiperSlide>
+                <SwiperSlide className="celeb-swiper-item"><Link to={'/celeb'}><Avatar className="celeb-plus-button" size={80} icon={<PlusOutlined/>}/></Link></SwiperSlide>
             }
         </Swiper>
     )
