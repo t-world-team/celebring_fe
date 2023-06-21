@@ -2,19 +2,27 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import EventItem from '../components/EventItem';
 
-import { Button, Carousel } from 'antd';
+import { Button, Carousel, message } from 'antd';
 import { CalendarOutlined, UnorderedListOutlined } from '@ant-design/icons';
 import CalendarItem from '../components/CalendarItem';
 import { useParams } from 'react-router-dom';
 import { CelebSwiper } from '../components/CelebItem';
 import { EventSkeleton } from '../components/SkeletonItem';
+import { useContext } from 'react';
+import { AuthContext } from '../contexts/auth-context';
 
 const Character = (props) => {
+    const auth = useContext(AuthContext);
     const [isLoad, setIsLoad] = useState(false);
     const [viewList, setViewList] = useState(true);
     const [eventList, setEventList] = useState();
     const params = useParams();
-    const group = params.id === '2' ? true : false;  // 바꿔야함
+    const [group, setGroup] = useState(false);
+    const [subCelebList, setSubCelebList] = useState([]);
+    const header = auth.isLoggedIn ? {
+                        'Content-Type': 'application/json',
+                        Authorization: `Bearer ${auth.token}`,
+                    } : null;
 
     const getEvent = (key) => {
         return eventList[key];
@@ -31,6 +39,28 @@ const Character = (props) => {
         setIsLoad(true);
     }, []);
 
+    useEffect(() => {
+        axios({
+            method: 'get',
+            url: `${process.env.REACT_APP_API_URL}/celeb/sub?celebId=${params.id}`,
+            headers: header,
+        })
+        .then((response) => response.data)
+        .then((data) => {
+            if(data.length > 0) {
+                setGroup(true);
+                setSubCelebList(data);
+            } else {
+                setGroup(false);
+                setSubCelebList([]);
+            }
+        })
+        .catch((error) => {
+            console.log(error);
+            message.warning('오류가 발생했습니다.')
+        });
+    }, [params]);
+
     return (
         <div className="detail">
             <div className="detail-header">
@@ -43,7 +73,11 @@ const Character = (props) => {
                 </div>
             </div>
             <div className="detail-events">
-                {group && <div className="detail-members"><CelebSwiper addPlus={false}/></div>}
+                {group && 
+                    <div className="detail-members">
+                        <CelebSwiper list={subCelebList} useLike={true} addPlus={false}/>
+                    </div>
+                }
                 <div className="detail-title">
                     <h2>(그룹명) 이벤트 리스트</h2>
                     <div className="button-group">

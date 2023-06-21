@@ -169,8 +169,6 @@
 
 /* detail */
 .detail {
-    display: flex;
-    flex-wrap: wrap;
     .detail-icon {
         display: flex;
         flex-grow: 1;
@@ -271,8 +269,6 @@
         }
     }
     .detail-events {
-        flex-grow: 1;
-        flex-basis: 400px;
         .detail-members {
             margin: 10px 0;
         }
