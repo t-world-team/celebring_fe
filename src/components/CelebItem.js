@@ -96,6 +96,7 @@ const CelebList = (props) => {
 const CelebSwiper = (props) => {
     const addPlus = props.addPlus != null ? props.addPlus : true;
     const celebs = props.list ? props.list : [];
+    const useLike = props.useLike != null ? props.useLike : false;
     
     return (
       <Swiper
@@ -107,7 +108,7 @@ const CelebSwiper = (props) => {
         style={{height: 'auto'}}
         >
             {celebs.map(celeb => 
-                <SwiperSlide className="celeb-swiper-item"><CelebAvatar url={celeb.profileImage} name={celeb.name} id={celeb.id} group={true} groupName={celeb.groupName}/></SwiperSlide>
+                <SwiperSlide className="celeb-swiper-item"><CelebAvatar url={celeb.profileImage} name={celeb.name} id={celeb.id} group={true} groupName={celeb.groupName} like={celeb.like} useLike={useLike}/></SwiperSlide>
             )}
             {addPlus && 
                 <SwiperSlide className="celeb-swiper-item"><Link to={'/celeb'}><Avatar className="celeb-plus-button" size={80} icon={<PlusOutlined/>}/></Link></SwiperSlide>
