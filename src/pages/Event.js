@@ -1,30 +1,118 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import axios from 'axios';
 
-import { Avatar, Button, Popover, Rate } from 'antd';
-import { EnvironmentOutlined, CalendarOutlined, ClockCircleOutlined, HeartFilled, EditOutlined, DeleteOutlined, ZoomInOutlined } from '@ant-design/icons';
+import { Button, Popover, Rate, message, Modal } from 'antd';
+import { EnvironmentOutlined, CalendarOutlined, ClockCircleOutlined, HeartFilled, EditOutlined, DeleteOutlined, ZoomInOutlined, ExclamationCircleFilled } from '@ant-design/icons';
 import { TwitterTweetEmbed } from 'react-twitter-embed';
-import { AfterWordList } from '../components/AfterwordItem';
-import PanelItem from '../components/PanelItem';
-import ShareBoxLineIcon from 'remixicon-react/ShareBoxLineIcon';
 import More2FillIcon from 'remixicon-react/More2FillIcon';
 import { useParams } from 'react-router-dom';
-
+import { AuthContext } from '../contexts/auth-context';
+const { confirm } = Modal;
 const mainColor = process.env.REACT_APP_MAIN_COLOR;
 
 const Event = (props) => {
+    const auth = useContext(AuthContext);
     const params = useParams();
     const [event, setEvent] = useState();
-    let writer = props.writer ? props.writer : true;
+    const [likeCount, setLikeCount] = useState();
+    const [writer, setWriter] = useState(0);
+    const [open, setOpen] = useState(false);
+    
+    const hide = () => {
+        setOpen(false);
+    };
+    const handleOpenChange = (newOpen) => {
+        setOpen(newOpen);
+    };
+    
+    const showDeleteConfirm = () => {
+        setOpen(false);
+        confirm({
+          title: '해당 이벤트를 삭제하시겠습니까?',
+          icon: <ExclamationCircleFilled />,
+          content: '삭제한 이벤트는 다시 확인할 수 없습니다.',
+          okText: 'Yes',
+          okType: 'danger',
+          cancelText: 'No',
+          onOk() {
+            axios({
+                method: 'DELETE',
+                url: `${process.env.REACT_APP_API_URL}/events`, 
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${auth.token}`,
+                },
+                data: JSON.stringify({eventId: params.id})
+            })
+            .then((res) => res.status)
+            .then((status) => {
+                if(status === 200) {
+                    message.success('이벤트가 삭제되었습니다.');
+                }
+            })
+            .catch((error) => {
+                message.warning('오류가 발생했습니다.');
+            });
+            
+          },
+          onCancel() {
+            // message.error('Click on No');
+          },
+        });
+    };
+
+    const toggleEventLike = (number) => {
+        if (auth.isLoggedIn) {
+            likeEvent(number > 0 ? true : false);
+        } else {
+            message.warning('로그인이 필요합니다.');
+            setLikeCount(0);
+        }
+    }
+
+    const likeEvent = async (bLike) => {
+        let likeMethod = bLike ? 'POST' : 'DELETE';
+        
+        axios({
+            method: likeMethod,
+            url: `${process.env.REACT_APP_API_URL}/events/likes`, 
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${auth.token}`,
+            },
+            data: JSON.stringify({eventId: params.id})
+        })
+        .then((res) => res.status)
+        .then((status) => {
+            if(status === 200) {
+                setLikeCount(bLike ? 1 : 0);
+            }
+        })
+        .catch((error) => {
+            setLikeCount(bLike ? 0 : 1);
+            message.warning('오류가 발생했습니다.');
+        });
+    }
 
     useEffect(() => {
-        axios.get(`${process.env.REACT_APP_API_URL}/events/detail/${params.id}`)
-            .then((res) => res.data)
-            .then((data) => {
-                if (!data.empty) setEvent(data);
-                console.log(data)
-            })
-            .catch((error) => console.log(error));
+        axios({
+            method: 'GET',
+            url: `${process.env.REACT_APP_API_URL}/events/detail/${params.id}`, 
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${auth.token}`,
+            }
+        })
+        .then((res) => res.data)
+        .then((data) => {
+            if (!data.empty) {
+                setEvent(data);
+                setLikeCount(data.liked);
+                setWriter(data.writer);
+            }
+        })
+        .catch((error) => console.log(error));
+            
     }, []);
 
     return (
@@ -39,17 +127,17 @@ const Event = (props) => {
                             character={<HeartFilled />} 
                             count={1} 
                             defaultValue={0}
-                            value={event&&event.liked}
+                            value={likeCount}
                             style={{fontSize: 24, color: mainColor}}
-                            onChange={(key) => { alert(key) }}
+                            onChange={toggleEventLike}
                         />
                         {writer ?
                         <Popover placement="bottomRight" content={
                             <React.Fragment>
                                 <Button type="text"><EditOutlined/> 수정</Button>
-                                <Button type="text"><DeleteOutlined/> 삭제</Button>
+                                <Button onClick={showDeleteConfirm} type="text"><DeleteOutlined/> 삭제</Button>
                             </React.Fragment>
-                        } trigger="click">
+                        } trigger="click" open={open} onOpenChange={handleOpenChange}>
                             <Button type="text" shape='circle' icon={<More2FillIcon/>}/>
                         </Popover>
                             : null
@@ -73,6 +161,8 @@ const Event = (props) => {
                     <AfterWordList />
                 </div> */}
             </div>
+
+
         </div>
     );
 };
