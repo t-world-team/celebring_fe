@@ -11,6 +11,12 @@ jobs:
     steps:
       - name: Checkout source code
         uses: actions/checkout@v3
+        
+      - name: env setting
+        run: |
+          echo "REACT_APP_TITLE=${{ secrets.REACT_APP_TITLE }}" >> .env
+          echo "REACT_APP_API_URL=${{ secrets.REACT_APP_API_TEST_URL }}" >> .env
+          echo "REACT_APP_MAIN_COLOR=${{ secrets.REACT_APP_MAIN_COLOR }}" >> .env
 
       - name: Build React
         run: |
