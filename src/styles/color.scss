@@ -1,12 +1,17 @@
-.celeb-avatar:hover {
-    color: $color-light;
+.celeb-avatar:hover
+, .ant-card-body a:hover {
+    color: $color-light!important;
 }
-
+.ant-btn-default:hover {
+    color: $color-light!important;
+    border-color: $color-light!important;
+}
 
 .ant-tabs .ant-tabs-tab:hover
 , .ant-tabs .ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn {
     color: $color-main!important;
 }
-.ant-tabs .ant-tabs-ink-bar {
-    background-color: $color-main;
+.ant-tabs .ant-tabs-ink-bar
+, .swiper-pagination-bullet-active {
+    background-color: $color-main!important;
 }
