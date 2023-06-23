@@ -13,13 +13,14 @@ const mainColor = process.env.REACT_APP_MAIN_COLOR;
 
 const CelebAvatar = (props) => {
     const auth = useContext(AuthContext);
-    const url = props.url ? props.url : 'https://pbs.twimg.com/profile_images/912222837938589697/_OWluI2j_400x400.jpg';
-    const name = props.name ? props.name : '비투비';
-    const id = props.id ? props.id : null;
+    const url = props.url ? props.url : `${process.env.PUBLIC_URL}/no_image.png`;
+    const name = props.name;
+    const id = props.id;
     const useLike = props.useLike != null ? props.useLike : false;
     const like = props.like ? props.like : 0;
     const group = props.group != null ? props.group : false;
     const groupName = props.groupName ? props.groupName : '';
+    const likeCallback = props.likeCallback;
 
     const [likeCount, setLikeCount] = useState(like);
 
@@ -49,6 +50,7 @@ const CelebAvatar = (props) => {
         .then((status) => {
             if(status === 200) {
                 setLikeCount(bLike ? 1 : 0);
+                if(likeCallback != undefined) likeCallback();
             }
         })
         .catch((error) => {
