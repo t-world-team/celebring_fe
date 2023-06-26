@@ -19,6 +19,10 @@ const Character = (props) => {
     const [viewList, setViewList] = useState(true);
     const [eventList, setEventList] = useState();
     const params = useParams();
+    const [images, setImages] = useState([]);
+    const [groupName, setGroupName] = useState(null);
+    const [eventDate, setEventDate] = useState(null);
+    const [isCelebLoad, setIsCelebLoad] = useState(false);
     const [group, setGroup] = useState(false);
     const [subCelebList, setSubCelebList] = useState([]);
     const [isMemberLoad, setIsMemberLoad] = useState(false);
@@ -33,21 +37,46 @@ const Character = (props) => {
 
     useEffect(() => {
         loading.showLoading(true);
-        if(isLoad && isMemberLoad) {
+        if(isLoad && isCelebLoad && isMemberLoad) {
             loading.showLoading(false);
         }
-    }, [isLoad, isMemberLoad]);
+    }, [isLoad, isCelebLoad, isMemberLoad]);
 
     useEffect(() => {
+        setIsLoad(false);
         axios.get(`${process.env.REACT_APP_API_URL}/events/${params.id}?page=0`)
             .then((res) => res.data)
             .then((data) => {
                 if (!data.empty) setEventList(data.content)
+                setIsLoad(true);
             })
-            .catch((error) => console.log(error));  
+            .catch((error) => {
+                console.log(error)
+                message.warning('오류가 발생했습니다.')
+                setIsLoad(true);
+            });  
         
-        setIsLoad(true);
-    }, []);
+    }, [params.id]);
+
+    useEffect(() => {
+        setIsCelebLoad(false);
+        axios({
+            method: 'get',
+            url: `${process.env.REACT_APP_API_URL}/celeb/${params.id}`,
+        })
+        .then((response) => response.data)
+        .then((data) => {
+            setGroupName(data.name);
+            setEventDate(data.eventDate);
+            setImages(data.imageList);
+            setIsCelebLoad(true);
+        })
+        .catch((error) => {
+            console.log(error);
+            message.warning('오류가 발생했습니다.')
+            setIsCelebLoad(true);
+        });
+    }, [params.id]);
 
     useEffect(() => {
         setIsMemberLoad(false);
@@ -65,33 +94,41 @@ const Character = (props) => {
                 setGroup(false);
                 setSubCelebList([]);
             }
+            setIsMemberLoad(true);
         })
         .catch((error) => {
             console.log(error);
             message.warning('오류가 발생했습니다.')
+            setIsMemberLoad(true);
         });
-        setIsMemberLoad(true);
-    }, [params]);
+    }, [params.id]);
 
     return (
         <div className="detail">
             <div className="detail-header">
                 <div className="header-image-centered">
                     <Carousel>
-                        <img src="https://pbs.twimg.com/media/FufPaNIWwAMmApz?format=jpg" alt="YookSungJae"/>
-                        <img src="https://pbs.twimg.com/media/FufOmIxWIAA_dNm?format=jpg" alt="SeoEunKwang"/>
-                        <img src="https://pbs.twimg.com/media/FufO8USX0AItfEw?format=jpg" alt="LeeChangSub"/>
+                        {images.length > 0 ? 
+                            images.map(image => <img src={image.imageUrl} alt={groupName + image.seq}/>)
+                            : <img src={process.env.PUBLIC_URL + '/no_image.png'} alt="YookSungJae"/>
+                        }
                     </Carousel>
                 </div>
             </div>
-            <div className="detail-events">
+            <div className="detail-celeb">
+                <div className="celeb-introduce">
+                    <h2>{groupName}</h2>
+                    <span className="celeb-date"><CalendarOutlined/> {eventDate}</span>
+                </div>
                 {group && 
                     <div className="detail-members">
-                        <CelebSwiper list={subCelebList} useLike={true} addPlus={false}/>
+                        <CelebSwiper list={subCelebList} useLike={true} addPlus={false} group={false}/>
                     </div>
                 }
+            </div>
+            <div className="detail-events">
                 <div className="detail-title">
-                    <h2>(그룹명) 이벤트 리스트</h2>
+                    <h3>이벤트 리스트</h3>
                     <div className="button-group">
                         <Button type="text" shape="circle" icon={<UnorderedListOutlined/>}
                             onClick={() => setViewList(true)} />
