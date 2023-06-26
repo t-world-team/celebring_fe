@@ -10,15 +10,18 @@ import { CelebSwiper } from '../components/CelebItem';
 import { EventSkeleton } from '../components/SkeletonItem';
 import { useContext } from 'react';
 import { AuthContext } from '../contexts/auth-context';
+import { LoadingContext } from '../contexts/loading-context';
 
 const Character = (props) => {
     const auth = useContext(AuthContext);
+    const loading = useContext(LoadingContext);
     const [isLoad, setIsLoad] = useState(false);
     const [viewList, setViewList] = useState(true);
     const [eventList, setEventList] = useState();
     const params = useParams();
     const [group, setGroup] = useState(false);
     const [subCelebList, setSubCelebList] = useState([]);
+    const [isMemberLoad, setIsMemberLoad] = useState(false);
     const header = auth.isLoggedIn ? {
                         'Content-Type': 'application/json',
                         Authorization: `Bearer ${auth.token}`,
@@ -27,6 +30,13 @@ const Character = (props) => {
     const getEvent = (key) => {
         return eventList[key];
     }
+
+    useEffect(() => {
+        loading.showLoading(true);
+        if(isLoad && isMemberLoad) {
+            loading.showLoading(false);
+        }
+    }, [isLoad, isMemberLoad]);
 
     useEffect(() => {
         axios.get(`${process.env.REACT_APP_API_URL}/events/${params.id}?page=0`)
@@ -40,6 +50,7 @@ const Character = (props) => {
     }, []);
 
     useEffect(() => {
+        setIsMemberLoad(false);
         axios({
             method: 'get',
             url: `${process.env.REACT_APP_API_URL}/celeb/sub?celebId=${params.id}`,
@@ -59,6 +70,7 @@ const Character = (props) => {
             console.log(error);
             message.warning('오류가 발생했습니다.')
         });
+        setIsMemberLoad(true);
     }, [params]);
 
     return (

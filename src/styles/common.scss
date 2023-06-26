@@ -136,6 +136,28 @@ footer {
     }
 }
 
+/* loading spinner */
+.loading-wrap { 
+    top: 0;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    z-index: 99999;
+    align-items: center;
+    justify-content: center;
+    background-color: #ffffffcc;
+    .loading-item {
+        flex: 0 0 150px;
+        width: 150px;
+        height: 150px;
+        img {
+            width: 100%;
+            height: 100%;
+        }
+    }
+}
+
 @mixin ellipsis($line-cnt) {
     overflow: hidden;
     text-overflow: ellipsis;
