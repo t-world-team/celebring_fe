@@ -17,6 +17,10 @@ jobs:
           echo "REACT_APP_TITLE=${{ secrets.REACT_APP_TITLE }}" >> .env
           echo "REACT_APP_API_URL=${{ secrets.REACT_APP_API_TEST_URL }}" >> .env
           echo "REACT_APP_MAIN_COLOR=${{ secrets.REACT_APP_MAIN_COLOR }}" >> .env
+          echo "REACT_APP_NAVER_MAP_API=${{ secrets.REACT_APP_NAVER_MAP_API }}" >> .env
+          echo "REACT_APP_NAVER_LOCAL_API_URL=${{ secrets.REACT_APP_NAVER_LOCAL_API_URL }}" >> .env
+          echo "REACT_APP_NAVER_CLIENT_ID=${{ secrets.REACT_APP_NAVER_CLIENT_ID }}" >> .env
+          echo "REACT_APP_NAVER_CLIENT_SECRET=${{ secrets.REACT_APP_NAVER_CLIENT_SECRET }}" >> .env
 
       - name: Build React
         run: |
