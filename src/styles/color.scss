@@ -2,7 +2,7 @@
 , .ant-card-body a:hover {
     color: $color-light!important;
 }
-.ant-btn-default:hover {
+.ant-btn-default:not(.ant-btn-dangerous):hover {
     color: $color-light!important;
     border-color: $color-light!important;
 }
@@ -14,4 +14,12 @@
 .ant-tabs .ant-tabs-ink-bar
 , .swiper-pagination-bullet-active {
     background-color: $color-main!important;
+}
+.ant-input-affix-wrapper:hover
+, .ant-input:hover
+, .ant-input:focus {
+    border-color: $color-light!important;
+}
+.ant-input:focus {
+    box-shadow: 0 0 0 2px $color-shadow;
 }

@@ -5,6 +5,7 @@ $height-main: calc(100% - #{$height-footer});
 
 /* color */
 $color-main: #ff9800;
+$color-shadow: rgba(255, 152, 0, 0.1);
 $color-default: #000;
 $color-light: lighten($color-main, 20%);
 
