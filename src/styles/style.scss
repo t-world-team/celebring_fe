@@ -272,6 +272,23 @@
             }
         }
     }
+    .detail-celeb {
+        margin: 15px 0 5px;
+        .celeb-introduce {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 5px 0;
+            h2, span {
+                display: inline-block;
+                margin: 0;
+            }
+            .celeb-date {
+                font-size: $font-s;
+                color: #aaa;
+            }
+        }
+    }
     .detail-events {
         .detail-members {
             margin: 10px 0;
