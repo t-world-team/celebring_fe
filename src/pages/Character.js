@@ -17,7 +17,7 @@ const Character = (props) => {
     const loading = useContext(LoadingContext);
     const [isLoad, setIsLoad] = useState(false);
     const [viewList, setViewList] = useState(true);
-    const [eventList, setEventList] = useState();
+    const [eventList, setEventList] = useState([]);
     const params = useParams();
     const [images, setImages] = useState([]);
     const [groupName, setGroupName] = useState(null);
@@ -47,7 +47,11 @@ const Character = (props) => {
         axios.get(`${process.env.REACT_APP_API_URL}/events/${params.id}?page=0`)
             .then((res) => res.data)
             .then((data) => {
-                if (!data.empty) setEventList(data.content)
+                if (!data.empty) {
+                    setEventList(data.content)
+                } else {
+                    setEventList([])
+                }
                 setIsLoad(true);
             })
             .catch((error) => {

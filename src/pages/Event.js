@@ -1,8 +1,9 @@
 import React, { useContext, useEffect, useState } from 'react';
 import axios from 'axios';
 
-import { Button, Popover, Rate, message, Modal } from 'antd';
-import { EnvironmentOutlined, CalendarOutlined, ClockCircleOutlined, HeartFilled, EditOutlined, DeleteOutlined, ZoomInOutlined, ExclamationCircleFilled } from '@ant-design/icons';
+import { Button, Popover, Rate, message, Modal, Image } from 'antd';
+import { EnvironmentOutlined, CalendarOutlined, ClockCircleOutlined, HeartFilled, EditOutlined, DeleteOutlined, ZoomInOutlined, PlusSquareOutlined, ExclamationCircleFilled, BlockOutlined } from '@ant-design/icons';
+import PanelItem from '../components/PanelItem';
 import { TwitterTweetEmbed } from 'react-twitter-embed';
 import More2FillIcon from 'remixicon-react/More2FillIcon';
 import { useParams } from 'react-router-dom';
@@ -17,6 +18,8 @@ const Event = (props) => {
     const [likeCount, setLikeCount] = useState();
     const [writer, setWriter] = useState(0);
     const [open, setOpen] = useState(false);
+    const [map, setMap] = useState();
+    const [mapVisible, setMapVisible] = useState(0);
     
     const hide = () => {
         setOpen(false);
@@ -94,6 +97,14 @@ const Event = (props) => {
         });
     }
 
+    const showMap = () => {
+        setMapVisible(mapVisible > 0 ? 0: 1);
+    }
+
+    const goMap = () => {
+        window.open(`https://map.naver.com/v5/search/${event.address}`, '_blank');
+    }
+
     useEffect(() => {
         axios({
             method: 'GET',
@@ -109,6 +120,7 @@ const Event = (props) => {
                 setEvent(data);
                 setLikeCount(data.liked);
                 setWriter(data.writer);
+                setMap(`https://naveropenapi.apigw.ntruss.com/map-static/v2/raster-cors?w=500&h=300&center=${data.mapX},${data.mapY}&level=16&scale=1&markers=type:d|size:mid|pos:${data.mapX} ${data.mapY}|color:red&X-NCP-APIGW-API-KEY-ID=${process.env.REACT_APP_NAVER_MAP_API}`);
             }
         })
         .catch((error) => console.log(error));
@@ -148,12 +160,14 @@ const Event = (props) => {
                     <p className="event-date"><CalendarOutlined/> {event?`${event.startDate} ~ ${event.endDate}` : '2023.11.01 ~ 2023.11.03'}</p>
                     <div className="event-location">
                         <span><EnvironmentOutlined/> {event? `${event.address}(${event.cafeName})`: '장소(카페상호명)'}</span>
-                        <Button type="default"><ZoomInOutlined/> 지도 보기</Button>
+                        <Button type="default" onClick={showMap}><PlusSquareOutlined/></Button>
                     </div>
+                    <p className="event-map">
+                        { mapVisible ? <img src={map ? map : "error"} onClick={goMap} /> : <></> }
+                    </p>
                     <p><ClockCircleOutlined /> {event?event.openingTime : '09:00 ~ 20:00'}</p>
                 </div>
                 <div className="detail-contents">
-                    {/* <PanelItem/> */}
                     { event && <TwitterTweetEmbed tweetId={event&&event.twitter} /> }
                 </div>
                 {/* <div className="detail-after">
