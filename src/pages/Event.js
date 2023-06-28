@@ -168,7 +168,7 @@ const Event = (props) => {
                     <p><ClockCircleOutlined /> {event?event.openingTime : '09:00 ~ 20:00'}</p>
                 </div>
                 <div className="detail-contents">
-                    { event && <TwitterTweetEmbed tweetId={event&&event.twitter} /> }
+                    { event && <TwitterTweetEmbed tweetId={event&&event.twitterId} /> }
                 </div>
                 {/* <div className="detail-after">
                     <h4>후기를 입력하세요</h4>
