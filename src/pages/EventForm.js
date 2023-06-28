@@ -60,12 +60,7 @@ const EventForm = (props) => {
         try {
             const response = await axios({
                 method: 'get',
-                url: `${process.env.REACT_APP_NAVER_LOCAL_API_URL}?query=${query}&display=5`,
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-Naver-Client-Id': process.env.REACT_APP_NAVER_CLIENT_ID,
-                    'X-Naver-Client-Secret': process.env.REACT_APP_NAVER_CLIENT_SECRET,
-                },
+                url: `${process.env.REACT_APP_API_URL}/local?query=${query}`,
             });
             const data = await response.data;
             setMapSearchResult(data.items);
