@@ -7,7 +7,7 @@ import { Link } from 'react-router-dom';
 const { Meta } = Card;
 
 const EventItem = (props) => {
-    let thumbnail = props.thumbnail ? props.thumbnail : 'https://res.cloudinary.com/celebring/image/upload/v1687418615/celeb/FuQWivIaMAIOrMn_jxphha.jpg';
+    let thumbnail = props.thumbnail ? props.thumbnail : '/no_image.png';
     let id = props.id ? props.id : 1;
     let title = props.title ? props.title : '이벤트명입니다. 생일카페 이벤트명입니다.';
     let date = props.date ? props.date : '23.11.01 ~ 23.11.03';

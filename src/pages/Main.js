@@ -78,6 +78,7 @@ const Main = () => {
                                 date = {`${getEvent(key).startDate}~${getEvent(key).endDate}`}
                                 location = {`${getEvent(key).address}(${getEvent(key).cafeName})`}
                                 celebs = {`${getEvent(key).celeb}`}
+                                thumbnail = {`${getEvent(key).thumbnail[0]}`}
                             />
                         )
                     }) : <div>이벤트가 존재하지 않습니다.</div>}
