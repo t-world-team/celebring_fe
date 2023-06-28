@@ -95,7 +95,7 @@ const EventForm = (props) => {
         .then((response) => {
             if(response.status === 200) {
                 message.info('등록이 완료되었습니다.');
-                //navigate(response.data);
+                navigate(`/event/${response.data}`);
             } else {
                 message.warning('등록에 실패하였습니다.');
             }
@@ -152,7 +152,7 @@ const EventForm = (props) => {
                                     <div className="local-item"
                                         onClick={() => {
                                             form.setFieldsValue({cafeName: item.title.replaceAll(/<[^>]*>?/g, '')});
-                                            form.setFieldsValue({address: item.roadAddress});
+                                            form.setFieldsValue({address: item.roadAddress !== '' ? item.roadAddress : item.address});
                                             form.setFieldsValue({mapX: item.mapx});
                                             form.setFieldsValue({mapY: item.mapy});
                                             hideMapModal();
@@ -161,7 +161,7 @@ const EventForm = (props) => {
                                         <EnvironmentOutlined />
                                         <div className="local-location">
                                             <div dangerouslySetInnerHTML={{__html: item.title}}></div>
-                                            <div className="location">{item.roadAddress}</div>
+                                            <div className="location">{item.roadAddress !== '' ? item.roadAddress : item.address}</div>
                                         </div>
                                     </div>
                                 )

@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 
-import { Button, message } from 'antd';
+import { Button, FloatButton, message } from 'antd';
 import TabItem from '../components/TabItem';
 import EventItem from '../components/EventItem';
 import { CelebAvatar } from '../components/CelebItem';
@@ -9,6 +9,7 @@ import { AuthContext } from '../contexts/auth-context';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { AvatarSkeletonList } from '../components/SkeletonItem';
+import { CalendarOutlined, PlusOutlined, UsergroupAddOutlined } from '@ant-design/icons';
 
 const tabReg = [
     {
@@ -108,6 +109,15 @@ const MyPage = (props) => {
 
     return (
         <div className="mypage">
+            <FloatButton.Group
+                trigger="hover"
+                type="primary"
+                icon={<PlusOutlined/>}
+                style={{position:'absolute'}}
+            >
+                <FloatButton href="/event/form" icon={<CalendarOutlined />}/>
+                <FloatButton icon={<UsergroupAddOutlined />}/>
+            </FloatButton.Group>
             <div className="mypage-title">
                 <p>안녕하세요.</p>
             </div>
