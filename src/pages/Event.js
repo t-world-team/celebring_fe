@@ -120,7 +120,7 @@ const Event = (props) => {
                 setEvent(data);
                 setLikeCount(data.liked);
                 setWriter(data.writer);
-                setMap(`https://naveropenapi.apigw.ntruss.com/map-static/v2/raster-cors?w=500&h=300&center=${data.mapX},${data.mapY}&level=16&scale=1&markers=type:d|size:mid|pos:${data.mapX} ${data.mapY}|color:red&X-NCP-APIGW-API-KEY-ID=${process.env.REACT_APP_NAVER_MAP_API}`);
+                setMap(`https://naveropenapi.apigw.ntruss.com/map-static/v2/raster-cors?crs=NHN:128&w=500&h=300&center=${data.mapX},${data.mapY}&level=16&scale=1&markers=type:d|size:mid|pos:${data.mapX} ${data.mapY}|color:red&X-NCP-APIGW-API-KEY-ID=${process.env.REACT_APP_NAVER_MAP_API}`);
             }
         })
         .catch((error) => console.log(error));

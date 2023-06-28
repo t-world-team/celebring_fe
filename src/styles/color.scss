@@ -20,6 +20,7 @@
 , .ant-input:focus {
     border-color: $color-light!important;
 }
-.ant-input:focus {
+.ant-input:focus
+, .ant-input-affix-wrapper:focus {
     box-shadow: 0 0 0 2px $color-shadow;
 }
