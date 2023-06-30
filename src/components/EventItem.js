@@ -15,28 +15,30 @@ const EventItem = (props) => {
     let celebs = props.celebs ? props.celebs : ['서은광(비투비)', '이민혁(비투비)'];
 
     return (
-        <div className="event-component">
-            <Card
-                hoverable 
-                style={{ width: '100%' }}
-            >
-            <Meta
-                title={title}
-                description={
-                <Link to={`/event/${id}`}> 
-                    <div className="event-content">
-                        <p className="event-date"><CalendarOutlined/> {date}</p>
-                        <p className="event-location"><EnvironmentOutlined/> {location}</p>
-                        <p className="event-celeb"><SmileOutlined /> {String(celebs)}</p>
-                    </div>
-                    <div className="event-image">
-                        <img src={thumbnail} alt="thumbnail"/>
-                    </div>
-                </Link>
-                }
-                />
-            </Card>
-        </div>
+        <Link to={`/event/${id}`}> 
+            <div className="event-component">
+                <Card
+                    hoverable 
+                    style={{ width: '100%' }}
+                >
+                <Meta
+                    title={title}
+                    description={
+                    <Link to={`/event/${id}`}> 
+                        <div className="event-content">
+                            <p className="event-date"><CalendarOutlined/> {date}</p>
+                            <p className="event-location"><EnvironmentOutlined/> {location}</p>
+                            <p className="event-celeb"><SmileOutlined /> {String(celebs)}</p>
+                        </div>
+                        <div className="event-image">
+                            <img src={thumbnail} alt="thumbnail"/>
+                        </div>
+                    </Link>
+                    }
+                    />
+                </Card>
+            </div>
+        </Link>
         
     );
 };

@@ -257,11 +257,15 @@
             .event-location {
                 display: flex;
                 justify-content: space-between;
-                align-items: center;
+                // align-items: center;
             }
             .event-map {
                 display: flex;
                 justify-content: center;
+                img {
+                    width: 100%;
+                    height: auto;
+                }
             }
         }
         .detail-after {
