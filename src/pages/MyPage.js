@@ -8,7 +8,7 @@ import { AfterWordList } from '../components/AfterwordItem';
 import { AuthContext } from '../contexts/auth-context';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
-import { AvatarSkeletonList } from '../components/SkeletonItem';
+import { AvatarSkeletonList, EventSkeletonList } from '../components/SkeletonItem';
 import { CalendarOutlined, PlusOutlined, UsergroupAddOutlined } from '@ant-design/icons';
 
 const tabReg = [
@@ -32,6 +32,7 @@ const MyPage = (props) => {
 
     function changeTabFav() {
         setTabFav(false);
+
     }
     function changeTabReg() {
         setTabFav(true);
@@ -40,6 +41,22 @@ const MyPage = (props) => {
     const [celebLike, setCelebLike] = useState(1);
     const [favCelebList, setFavCelebList] = useState([]);
     const [celebLoad, setCelebLoad] = useState(false);
+
+    const [eventLike, setEventLike] = useState(1);
+    const [favEventList, setFavEventList] = useState([]);
+    const [favEventLoad, setFavEventLoad] = useState(false);
+    
+    const [eventReg, setEventReg] = useState(1);
+    const [regEventList, setRegEventList] = useState([]);
+    const [regEventLoad, setRegEventLoad] = useState(false);
+
+    const getFavEvent = (key) => {
+        return favEventList[key];
+    }
+
+    const getRegEvent = (key) => {
+        return regEventList[key];
+    }
 
     useEffect(() => {
         setCelebLoad(false);
@@ -72,6 +89,60 @@ const MyPage = (props) => {
         setCelebLike(0);
     }
 
+    useEffect(() => {
+        setFavEventLoad(false);
+        if(auth.token) {
+            axios({
+                method: 'get',
+                url: `${process.env.REACT_APP_API_URL}/events/favorite?page=0`,
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${auth.token}`,
+                },
+            })
+            .then((response) => response.data)
+            .then((data) => {
+                if(data !== null) {
+                    setFavEventList(data.content);
+                    console.log(data.content);
+                    setFavEventLoad(true);
+                }
+            })
+            .catch((error) => {
+                message.warning('오류가 발생했습니다.')
+                setFavEventLoad(true);
+            });
+        }
+        setEventLike(1);
+    }, [auth, eventLike]);
+
+    useEffect(() => {
+        setRegEventLoad(false);
+        if(auth.token) {
+            axios({
+                method: 'get',
+                url: `${process.env.REACT_APP_API_URL}/events/my?page=0`,
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${auth.token}`,
+                },
+            })
+            .then((response) => response.data)
+            .then((data) => {
+                if(data !== null) {
+                    setRegEventList(data.content);
+                    console.log(data.content);
+                    setRegEventLoad(true);
+                }
+            })
+            .catch((error) => {
+                message.warning('오류가 발생했습니다.')
+                setRegEventLoad(true);
+            });
+        }
+        setEventLike(1);
+    }, [auth, eventLike]);
+
     const tabFav = [
         {
             key: 'favCeleb',
@@ -103,8 +174,65 @@ const MyPage = (props) => {
         {
             key: 'favEvent',
             label: '이벤트',
-            children: <EventItem useHeart={true}/>,
+            children: 
+                <div className="event-list-wrap">
+                    <div className="event-items">
+                        {favEventList ?
+                            favEventLoad ? 
+                                Object.keys(favEventList).map((key) => {
+                                    return (
+                                        <div className="event-item">
+                                            <EventItem 
+                                                id =  {`${getFavEvent(key).eventId}`}
+                                                title = {`${getFavEvent(key).eventName}`}
+                                                date = {`${getFavEvent(key).startDate}~${getFavEvent(key).endDate}`}
+                                                location = {`${getFavEvent(key).address}(${getFavEvent(key).cafeName})`}
+                                                celebs = {`${getFavEvent(key).celeb}`}
+                                                thumbnail = {`${getFavEvent(key).thumbnail[0]}`}
+                                            />
+                                        </div>
+                                    )
+                                }) : <EventSkeletonList count={6} />
+                            : null
+                        } 
+                    </div>
+                </div>
         },
+    ];
+
+    const tabReg = [
+        {
+            key: 'regEvent',
+            label: '이벤트',
+            children: 
+                <div className="event-list-wrap">
+                    <div className="event-items">
+                        {regEventList ?
+                            regEventLoad ? 
+                                Object.keys(regEventList).map((key) => {
+                                    return (
+                                        <div className="event-item">
+                                            <EventItem 
+                                                id =  {`${getRegEvent(key).eventId}`}
+                                                title = {`${getRegEvent(key).eventName}`}
+                                                date = {`${getRegEvent(key).startDate}~${getRegEvent(key).endDate}`}
+                                                location = {`${getRegEvent(key).address}(${getRegEvent(key).cafeName})`}
+                                                celebs = {`${getRegEvent(key).celeb}`}
+                                                thumbnail = {`${getRegEvent(key).thumbnail[0]}`}
+                                            />
+                                        </div>
+                                    )
+                                }) : <EventSkeletonList count={6} />
+                            : null
+                        } 
+                    </div>
+                </div>
+        },
+        // {
+        //     key: 'regAfterword',
+        //     label: '후기',
+        //     children: <AfterWordList/>
+        // },
     ];
 
     return (
@@ -126,7 +254,7 @@ const MyPage = (props) => {
                     <Button size='large' onClick={auth.logout} style={{width: '100%'}}>로그아웃</Button>
                 </Link>
                 {buttonToggle ? 
-                    <Button size='large' onClick={changeTabFav}>등록한 이벤트/후기</Button> :
+                    <Button size='large' onClick={changeTabFav}>등록한 이벤트</Button> :
                     <Button size='large' onClick={changeTabReg}>좋아요 목록</Button>
                 }
             </div>
@@ -136,7 +264,7 @@ const MyPage = (props) => {
                     <TabItem tabs={tabFav}/>
                 </React.Fragment> :
                 <React.Fragment>
-                    <h3>등록한 이벤트/후기</h3>
+                    <h3>등록한 이벤트</h3>
                     <TabItem tabs={tabReg}/>
                 </React.Fragment>
             }

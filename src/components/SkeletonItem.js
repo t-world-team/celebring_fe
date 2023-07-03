@@ -10,6 +10,25 @@ const EventSkeleton = () => {
     );
 }
 
+const EventSkeletonList = (props) => {
+    const count = props.count;
+    const getSkeleton = () => {
+        const skeletonList = [];
+        for(let i=0; i<count; i++) {
+            skeletonList.push(<EventSkeleton />);
+        }
+        return skeletonList;
+    }
+
+    for(let i=0;i<count;i++){
+        
+    }
+
+    return (
+        <React.Fragment>{getSkeleton()}</React.Fragment>
+    )
+}
+
 const AvatarSkeleton = () => {
     return (
         <div className="avatar-skeleton">
@@ -38,4 +57,4 @@ const AvatarSkeletonList = (props) => {
     )
 }
 
-export { EventSkeleton, AvatarSkeleton, AvatarSkeletonList };
+export { EventSkeleton, EventSkeletonList, AvatarSkeleton, AvatarSkeletonList };
