@@ -1,3 +1,12 @@
+::selection {
+    color: white;
+    background-color: $color-main;
+}
+::-moz-selection {
+    color: white;
+    background-color: $color-main;
+}
+
 .celeb-avatar:hover
 , .ant-card-body a:hover {
     color: $color-light!important;
@@ -12,15 +21,67 @@
     color: $color-main!important;
 }
 .ant-tabs .ant-tabs-ink-bar
-, .swiper-pagination-bullet-active {
+, .swiper-pagination-bullet-active
+, .ant-float-btn-primary .ant-float-btn-body
+, .ant-picker-range .ant-picker-active-bar
+, .ant-picker-cell-in-view.ant-picker-cell-range-end .ant-picker-cell-inner
+, .ant-picker-cell-in-view.ant-picker-cell-range-start .ant-picker-cell-inner
+//, .ant-picker-cell-in-view.ant-picker-cell-in-range.ant-picker-cell-range-hover-start::before
+//, .ant-picker-cell-in-view.ant-picker-cell-in-range.ant-picker-cell-range-hover-end::before
+ {
     background-color: $color-main!important;
 }
 .ant-input-affix-wrapper:hover
 , .ant-input:hover
-, .ant-input:focus {
+, .ant-input:focus
+, .ant-input-affix-wrapper:focus
+, .ant-input-affix-wrapper-focused
+, .ant-select:hover .ant-select-selector
+, .ant-select:focus .ant-select-selector
+, .ant-select-focused.ant-select:not(.ant-select-disabled) .ant-select-selector
+, .ant-picker:hover
+, .ant-picker-focused
+, .ant-picker-cell-in-view.ant-picker-cell-today .ant-picker-cell-inner::before
+, .ant-picker-cell-in-view.ant-picker-cell-range-hover::before {
     border-color: $color-light!important;
 }
 .ant-input:focus
-, .ant-input-affix-wrapper:focus {
-    box-shadow: 0 0 0 2px $color-shadow;
+, .ant-input-affix-wrapper:focus
+, .ant-input-affix-wrapper-focused
+, .ant-select-focused .ant-select-selector
+, .ant-picker-focused {
+    box-shadow: 0 0 0 2px color-shadow(0.1)!important;
+}
+.ant-input-search-button:not(.ant-btn-primary):active {
+    color: $color-dark!important;
+}
+.ant-btn-default:not(:disabled):active {
+    color: $color-dark!important;
+    border-color: $color-dark!important;
+}
+.ant-picker-cell-in-view.ant-picker-cell-in-range.ant-picker-cell-range-hover::before
+, .ant-picker-cell-in-view.ant-picker-cell-range-start:not(.ant-picker-cell-range-start-single).ant-picker-cell-range-hover-start::before
+, .ant-picker-cell-in-view.ant-picker-cell-range-end:not(.ant-picker-cell-range-end-single).ant-picker-cell-range-hover-end::before
+, .ant-picker-cell-in-view.ant-picker-cell-in-range.ant-picker-cell-range-hover-end > div::after
+, .ant-picker-cell-in-view.ant-picker-cell-in-range.ant-picker-cell-range-hover-start > div::after {
+    background: $color-lighter!important;
+}
+.ant-picker-cell-in-view.ant-picker-cell-in-range::before
+, .ant-picker-cell-in-view.ant-picker-cell-range-start:not(.ant-picker-cell-range-start-single)::before
+, .ant-picker-cell-in-view.ant-picker-cell-range-end:not(.ant-picker-cell-range-end-single)::before {
+    background: $color-lightest!important;
+}
+.ant-picker-cell-in-view.ant-picker-cell-range-hover-start:not(.ant-picker-cell-in-range):not(.ant-picker-cell-range-start):not(.ant-picker-cell-range-end)::after
+, .ant-picker-cell-in-view.ant-picker-cell-range-hover-end:not(.ant-picker-cell-in-range):not(.ant-picker-cell-range-start):not(.ant-picker-cell-range-end)::after
+, .ant-picker-cell-in-view.ant-picker-cell-range-hover-start.ant-picker-cell-range-start-single::after
+, .ant-picker-cell-in-view.ant-picker-cell-range-hover-end.ant-picker-cell-range-end-single::after
+, .ant-picker-cell-in-view.ant-picker-cell-range-hover:not(.ant-picker-cell-in-range)::after {
+    border-top: 1px dashed $color-lighter!important;
+    border-bottom: 1px dashed $color-lighter!important;
+}
+.ant-picker-cell-in-view.ant-picker-cell-range-hover-start::after {
+    border-inline-start: 1px dashed $color-lighter!important;
+}
+.ant-picker-cell-in-view.ant-picker-cell-range-hover-end::after {
+    border-inline-end: 1px dashed $color-lighter!important;
 }

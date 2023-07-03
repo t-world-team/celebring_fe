@@ -5,9 +5,11 @@ $height-main: calc(100% - #{$height-footer});
 
 /* color */
 $color-main: #ff9800;
-$color-shadow: rgba(255, 152, 0, 0.1);
 $color-default: #000;
+$color-lightest: lighten($color-main, 45%);
+$color-lighter: lighten($color-main, 35%);
 $color-light: lighten($color-main, 20%);
+$color-dark: darken($color-main, 5%);
 
 /* responsive web size */
 $max-width: 600px;
@@ -22,3 +24,7 @@ $font-m: 1rem;
 $font-l: 1.2rem;
 $font-xl: 1.4rem;
 $font-xxl: 2rem;
+
+@function color-shadow($opacity) {
+    @return rgba(255, 152, 0, $opacity);
+}
