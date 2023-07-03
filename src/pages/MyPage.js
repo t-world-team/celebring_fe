@@ -192,7 +192,7 @@ const MyPage = (props) => {
                                             />
                                         </div>
                                     )
-                                }) : <EventSkeletonList count={6} />
+                                }) : <EventSkeletonList count={4} />
                             : null
                         } 
                     </div>

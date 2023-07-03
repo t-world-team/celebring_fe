@@ -5,7 +5,13 @@ import { Skeleton } from 'antd';
 const EventSkeleton = () => {
     return (
         <div className="event-skeleton">
-            <Skeleton active={true}/>
+            <div className="event-content">
+                <Skeleton.Input active={true} size={'small'} />
+                <Skeleton title={false} paragraph={{width: 100, rows: 3}} active={true}/>
+            </div>
+            <div className="event-image">
+                <Skeleton.Image active={true} />
+            </div>
         </div>
     );
 }
