@@ -7,11 +7,18 @@ import 'dayjs/locale/ko';
 import Cake2LineIcon from 'remixicon-react/Cake2LineIcon';
 import EventItem from './EventItem';
 
-const eventDateList = [
-    '2023-03-10',
-    '2023-03-07',
+const eventDateList = 
+[
+    {
+        date: '2023-07-12',
+        count: 2
+    },
+    {
+        date: '2023-07-07',
+        count: 4
+    }
 ]
-const anniversary = '2023-03-21';
+
 const eventList = {
     date: '2023-03-07',
     events: [
@@ -33,6 +40,8 @@ const CalendarItem = (props) => {
     const initDate = today.getFullYear() + '년 ' + (today.getMonth() + 1) + '월';
     const [dateTitle, setDateTitle] = useState(initDate);
 
+    const anniversary = props.anniversary ? props.anniversary : '2023-01-01';
+
     const eventArea = null;
     const [events, setEventArea] = useState(eventArea);
 
@@ -45,10 +54,12 @@ const CalendarItem = (props) => {
         let badge;
         let anniv;
 
-        if(eventDateList.includes(calDate)) {
-            badge = <Badge color='green' count={99}/>;
-        }
-        if(anniversary === calDate) {
+        eventDateList.map(event => {
+            if(event.date == calDate) {
+                badge = <Badge color='green' count={event.count}/>;
+            }
+        })
+        if(dayjs.year() + '-' + anniversary === calDate) {
             anniv = <Cake2LineIcon style={{fontSize: 32, position: 'absolute', bottom: 10, right: 0}}/>;
         }
 
