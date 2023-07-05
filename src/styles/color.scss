@@ -8,7 +8,8 @@
 }
 
 .ant-tabs .ant-tabs-tab:hover
-, .ant-tabs .ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn {
+, .ant-tabs .ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn
+, .ant-picker-today-btn {
     color: $color-main!important;
 }
 .ant-tabs .ant-tabs-ink-bar
@@ -19,7 +20,7 @@
 , .ant-picker-cell-in-view.ant-picker-cell-range-start .ant-picker-cell-inner
 //, .ant-picker-cell-in-view.ant-picker-cell-in-range.ant-picker-cell-range-hover-start::before
 //, .ant-picker-cell-in-view.ant-picker-cell-in-range.ant-picker-cell-range-hover-end::before
- {
+, .ant-btn-primary {
     background-color: $color-main!important;
 }
 .ant-input-affix-wrapper:hover
@@ -32,7 +33,9 @@
 , .ant-picker:hover
 , .ant-picker-focused
 , .ant-picker-cell-in-view.ant-picker-cell-today .ant-picker-cell-inner::before
-, .ant-picker-cell-in-view.ant-picker-cell-range-hover::before {
+, .ant-picker-cell-in-view.ant-picker-cell-range-hover::before
+, .ant-upload-wrapper.ant-upload-picture-card-wrapper .ant-upload.ant-upload-select:hover
+, .ant-upload-wrapper.ant-upload-picture-circle-wrapper .ant-upload.ant-upload-select:hover {
     border-color: $color-light!important;
 }
 .ant-input:focus

@@ -42,6 +42,15 @@
 /* celeb */
 .celeb-plus-button {
     background-color: $color-main;
+    cursor: pointer;
+}
+.celeb-plus-button-plain {
+    border-color: $color-main;
+    background-color: #fff;
+    cursor: pointer;
+    svg {
+        color: $color-main;
+    }
 }
 .celeb-avatar {
     display: flex;
@@ -102,6 +111,13 @@
     ul, li, div {
         display: flex;
     }
+}
+.celeb-image-upload {
+    text-align: center;
+}
+.ant-upload-wrapper.ant-upload-picture-card-wrapper .ant-upload.ant-upload-select
+, .ant-upload-wrapper.ant-upload-picture-circle-wrapper .ant-upload.ant-upload-select {
+    border: 1px solid #ddd;
 }
 
 /* event */
@@ -388,6 +404,29 @@
 .ant-picker-panels {
     flex-wrap: wrap;
     flex-direction: column;
+}
+.form-celeb {
+    h3 {
+        margin: 10px 0 20px;
+    }
+    .celeb-add {
+        text-align: center;
+    }
+    .celeb-member-add {
+        .celeb-member-title {
+            margin: 40px 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            h4 {
+                margin: 0;
+            }
+            span {
+                font-size: $font-s;
+                color: #aaa;
+            }
+        }
+    }
 }
 .form-event {
     .ant-form-item-control-input .ant-form-item {
