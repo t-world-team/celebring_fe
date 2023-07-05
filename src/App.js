@@ -14,6 +14,7 @@ import { AuthContext } from './contexts/auth-context';
 import { useAuth } from './hooks/login-hook';
 import { useLoading } from './hooks/loading-hook';
 import { LoadingContext } from './contexts/loading-context';
+import CelebForm from './pages/CelebForm';
 
 const loadingImg = process.env.PUBLIC_URL + '/loading.svg';
 
@@ -48,6 +49,7 @@ function App() {
           <Route path="/" element={<Layout/>}>
             <Route index element={<Main/>}/>
             <Route path="/celeb" element={<Celeb/>} />
+            <Route path="/celeb/form" element={<CelebForm/>} />
             <Route path="/character/:id" element={<Character/>} />
             <Route path="/event/:id" element={<Event/>} />
             <Route path="/event/form" element={<EventForm/>} />
