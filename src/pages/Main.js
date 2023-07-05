@@ -6,10 +6,12 @@ import { CelebSwiper } from '../components/CelebItem';
 import EventItem from '../components/EventItem';
 import { AvatarSkeletonList, EventSkeleton } from '../components/SkeletonItem';
 import { AuthContext } from '../contexts/auth-context';
+import { LoadingContext } from '../contexts/loading-context';
 import { message } from 'antd';
 
 const Main = () => {
     const auth = useContext(AuthContext);
+    const loading = useContext(LoadingContext);
     const [isLoad, setIsLoad] = useState(false);
     const [eventList, setEventList] = useState();
 
@@ -18,6 +20,7 @@ const Main = () => {
     }
 
     useEffect(() => {
+        setIsLoad(false);
         axios.get(`${process.env.REACT_APP_API_URL}/events?page=0`)
             .then((res) => res.data)
             .then((data) => {
@@ -46,15 +49,24 @@ const Main = () => {
             .then((data) => {
                 if(data !== null) {
                     setCelebList(data);
-                    setCelebLoad(true);
                 }
+                setCelebLoad(true);
             })
             .catch((error) => {
                 message.warning('오류가 발생했습니다.')
                 setCelebLoad(true);
             });
+        } else {
+            setCelebLoad(true);
         }
-    }, [auth]);
+    }, []);
+
+    useEffect(() => {
+        loading.showLoading(true);
+        if(isLoad && celebLoad) {
+            loading.showLoading(false);
+        }
+    }, [isLoad, celebLoad]);
 
     return (
         <React.Fragment>
