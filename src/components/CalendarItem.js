@@ -100,7 +100,7 @@ const CalendarItem = (props) => {
                 console.log(error)
                 setIsLoad(true);
             });
-    }, [month]);
+    }, [params.id, month]);
 
     return (
         <div className="event-calendar">
