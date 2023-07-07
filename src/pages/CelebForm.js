@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-import { Avatar, DatePicker, Form, Input, Modal, Upload } from 'antd';
+import { Avatar, DatePicker, Form, Input, Modal, Upload, message } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import locale from 'antd/es/date-picker/locale/ko_KR';
 import ImgCrop from 'antd-img-crop';
@@ -8,6 +8,7 @@ import dayjs from 'dayjs';
 
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { FreeMode } from 'swiper';
+import axios from 'axios';
 
 const CelebForm = (props) => {
     const [form] = Form.useForm();
@@ -15,24 +16,77 @@ const CelebForm = (props) => {
     const [celebModalOpen, setCelebModalOpen] = useState(false);
     const [imageLoading, setImageLoading] = useState(false);
    
+    const [uploadImageUrl, setUploadImageUrl] = useState('');
+    const [fileList, setFileList] = useState([]);
+    
     const openCelebModal = () => {
         setCelebModalOpen(true);
     }
     const closeCelebModal = () => {
         setCelebModalOpen(false);
+        setFileList([]);
     }
 
-    const [fileList, setFileList] = useState([]);
-    
-    //const changeImage = ({ fileList: newFileList }) => {
     const changeImage = (info) => {
-        console.log(info);
+        setFileList(info.fileList);
     };
 
-    const validateImage = (file) => {
-        // 파일 확장자
-        // 파일 용량 확인
-        return true;
+    const uploadImage = async options => {
+        const { onSuccess, onError, file, onProgress } = options;
+
+        let validateSize = true;
+        let validateExst = true;
+
+        if(file.size > 3145728) {
+            message.error('이미지는 3MB까지만 업로드할 수 있습니다.');
+            validateSize = false;
+        }
+        if(file.type !== 'image/jpeg' && file.type !== 'image/png') {
+            message.error('이미지 확장자는 JPG, JPEG, PNG만 업로드할 수 있습니다.');
+            validateExst = false;
+        }
+
+        if(validateSize && validateExst) {
+            const formData = new FormData();
+            formData.append("files", file);
+
+            axios.post(`${process.env.REACT_APP_API_URL}/image`, formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
+                onUploadProgress: event => {
+                    onProgress({percent: (event.loaded / event.total) * 100});
+                }
+            })
+            .then((response) => {
+                if(response.status === 200) {
+                    onSuccess("Ok");
+                    setUploadImageUrl(response.data[0].url);
+                    console.log(uploadImageUrl);
+                } else {
+                    onError(new Error('업로드 실패'));
+                }
+            })
+            .catch((error) => {
+                onError(new Error('업로드 실패'));
+            });
+        } else {
+            setFileList([]);
+            onError(new Error('업로드 실패'));
+        }
+    }
+
+    const [previewOpen, setPreviewOpen] = useState(false);
+    const [previewImage, setPreviewImage] = useState('');
+
+    const openPreviewModal = async (file) => {
+        setPreviewImage(file.thumbUrl);
+        setPreviewOpen(true);
+    }
+
+    const closePreviewModal = () => {
+        setPreviewImage('');
+        setPreviewOpen(false);
     }
     
     return ( 
@@ -75,14 +129,13 @@ const CelebForm = (props) => {
                     <div className="celeb-image-upload">
                         <ImgCrop rotationSlider>
                             <Upload
-                                action=""
+                                customRequest={uploadImage}
                                 listType="picture-circle"
                                 onChange={changeImage}
-                                beforeUpload={validateImage}
                                 maxCount={1}
-                                fileList={fileList}
+                                onPreview={openPreviewModal}
                             >
-                                {fileList.length > 1 ? null : 
+                                {fileList.length >= 1 ? null : 
                                     <React.Fragment>
                                         <PlusOutlined/>
                                     </React.Fragment>
@@ -97,6 +150,17 @@ const CelebForm = (props) => {
                         <DatePicker inputReadOnly={true} locale={locale} style={{width: '100%'}} placeholder='데뷔일 혹은 생일을 선택하세요'/>
                     </Form.Item>
                 </Form>
+            </Modal>
+            <Modal
+                open={previewOpen}
+                centered
+                title={null}
+                footer={null}
+                onCancel={closePreviewModal}
+                zIndex="9999"
+                width="auto"
+            >
+                <img style={{width: 'auto'}} src={previewImage}/>
             </Modal>
         </div>
     );
