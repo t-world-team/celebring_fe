@@ -146,7 +146,7 @@ const Event = (props) => {
                         {writer ?
                         <Popover placement="bottomRight" content={
                             <React.Fragment>
-                                <Button type="text"><EditOutlined/> 수정</Button>
+                                <Button type="text" href={`/event/form/${params.id}`}><EditOutlined/> 수정</Button>
                                 <Button onClick={showDeleteConfirm} type="text"><DeleteOutlined/> 삭제</Button>
                             </React.Fragment>
                         } trigger="click" open={open} onOpenChange={handleOpenChange}>

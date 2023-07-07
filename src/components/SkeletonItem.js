@@ -5,9 +5,34 @@ import { Skeleton } from 'antd';
 const EventSkeleton = () => {
     return (
         <div className="event-skeleton">
-            <Skeleton active={true}/>
+            <div className="event-content">
+                <Skeleton.Input active={true} size={'small'} />
+                <Skeleton title={false} paragraph={{width: 100, rows: 3}} active={true}/>
+            </div>
+            <div className="event-image">
+                <Skeleton.Image active={true} />
+            </div>
         </div>
     );
+}
+
+const EventSkeletonList = (props) => {
+    const count = props.count;
+    const getSkeleton = () => {
+        const skeletonList = [];
+        for(let i=0; i<count; i++) {
+            skeletonList.push(<EventSkeleton />);
+        }
+        return skeletonList;
+    }
+
+    for(let i=0;i<count;i++){
+        
+    }
+
+    return (
+        <React.Fragment>{getSkeleton()}</React.Fragment>
+    )
 }
 
 const AvatarSkeleton = () => {
@@ -38,4 +63,4 @@ const AvatarSkeletonList = (props) => {
     )
 }
 
-export { EventSkeleton, AvatarSkeleton, AvatarSkeletonList };
+export { EventSkeleton, EventSkeletonList, AvatarSkeleton, AvatarSkeletonList };

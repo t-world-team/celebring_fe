@@ -273,11 +273,15 @@
             .event-location {
                 display: flex;
                 justify-content: space-between;
-                align-items: center;
+                // align-items: center;
             }
             .event-map {
                 display: flex;
                 justify-content: center;
+                img {
+                    width: 100%;
+                    height: auto;
+                }
             }
         }
         .detail-after {
@@ -438,6 +442,9 @@
         .input-cafe {
             flex-grow: 1;
         }
+    }
+    h3 {
+        margin: 10px 0 20px;
     }
 }
 .local-items {
@@ -612,9 +619,15 @@
 }
 
 .event-skeleton {
-    width: 70%;
+    // width: 70%;
+    display: flex;
+    margin: 15px 5px;
     * {
         margin: 0;
+    }
+    .event-content {
+        flex-grow: 1;
+        margin-right: 20px;
     }
     .ant-skeleton-title {
         height: 20px!important;

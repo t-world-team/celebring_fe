@@ -1,3 +1,12 @@
+::selection {
+    color: white;
+    background-color: $color-main;
+}
+::-moz-selection {
+    color: white;
+    background-color: $color-main;
+}
+
 .celeb-avatar:hover
 , .ant-card-body a:hover {
     color: $color-light!important;
@@ -30,6 +39,7 @@
 , .ant-input-affix-wrapper-focused
 , .ant-select:hover .ant-select-selector
 , .ant-select:focus .ant-select-selector
+, .ant-select-focused.ant-select:not(.ant-select-disabled) .ant-select-selector
 , .ant-picker:hover
 , .ant-picker-focused
 , .ant-picker-cell-in-view.ant-picker-cell-today .ant-picker-cell-inner::before

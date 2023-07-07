@@ -53,6 +53,7 @@ function App() {
             <Route path="/character/:id" element={<Character/>} />
             <Route path="/event/:id" element={<Event/>} />
             <Route path="/event/form" element={<EventForm/>} />
+            <Route path="/event/form/:id" element={<EventForm/>} />
             <Route path="/mypage" element={<MyPage/>} />
           </Route>
         </Routes>
