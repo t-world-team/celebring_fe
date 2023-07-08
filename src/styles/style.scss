@@ -431,6 +431,14 @@
             }
         }
     }
+    .celeb-form-button {
+        display: flex;
+        gap: 10px;
+        margin-top: 30px;
+        button {
+            flex: 1 1;
+        }
+    }
 }
 .form-event {
     .ant-form-item-control-input .ant-form-item {

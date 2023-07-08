@@ -243,8 +243,8 @@ const MyPage = (props) => {
                 icon={<PlusOutlined/>}
                 style={{position:'absolute'}}
             >
-                <FloatButton href="/event/form" icon={<CalendarOutlined />}/>
-                <FloatButton icon={<UsergroupAddOutlined />}/>
+                <FloatButton icon={<Link to="/event/form"><CalendarOutlined /></Link>}/>
+                <FloatButton icon={<Link to="/celeb/form"><UsergroupAddOutlined /></Link>}/>
             </FloatButton.Group>
             <div className="mypage-title">
                 <p>안녕하세요.</p>

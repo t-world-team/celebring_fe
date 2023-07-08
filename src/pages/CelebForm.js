@@ -9,8 +9,14 @@ import ImgCrop from 'antd-img-crop';
 import locale from 'antd/es/date-picker/locale/ko_KR';
 import dayjs from 'dayjs';
 import axios from 'axios';
+import { useContext } from 'react';
+import { AuthContext } from '../contexts/auth-context';
+import { useNavigate } from 'react-router-dom';
 
 const CelebForm = (props) => {
+    const auth = useContext(AuthContext);
+    const navigate = useNavigate();
+
     const [celebData, setCelebData] = useState();
     const [memberData, setMemberData] = useState([]);
 
@@ -29,20 +35,20 @@ const CelebForm = (props) => {
 
     /* Celeb Add Form Modal */
     // Modal open
-    const openCelebAddModal = (type, name, date, url, index) => {
+    const openCelebAddModal = (type, name, eventDate, profileImage, index) => {
         if(type === 'M' && (celebData === undefined || celebData === null)) {
             message.warning("셀럽을 먼저 추가해 주세요");
             return false;
         }
 
-        if(url === undefined) {
+        if(profileImage === undefined) {
             setFileList([]);
         } else {
-            setFileList([{url: url, status: 'done'}]);
+            setFileList([{url: profileImage, status: 'done'}]);
         }
         
         form.setFieldsValue({name: name});
-        form.setFieldsValue({eventDate: date ? dayjs(date, 'YYYY-MM-DD') : null});
+        form.setFieldsValue({eventDate: eventDate ? dayjs(eventDate, 'YYYY-MM-DD') : null});
         form.setFieldsValue({index: index});
         form.setFieldsValue({type: type});
         setCelebModalOpen(true);
@@ -105,13 +111,13 @@ const CelebForm = (props) => {
     // Confirm > Set Avatar Info
     const setAvatarInfo = (values) => {
         if(values.type === 'C') {
-            setCelebData({name: values.name, url: uploadImageUrl, date: dayjs(values.eventDate).format('YYYY-MM-DD')});
+            setCelebData({name: values.name, profileImage: uploadImageUrl, eventDate: dayjs(values.eventDate).format('YYYY-MM-DD')});
         } else {
             const memberArray = memberData;
             if(values.index === undefined || values.index === null) {
-                memberArray.push({name: values.name, url: uploadImageUrl, date: dayjs(values.eventDate).format('YYYY-MM-DD')});
+                memberArray.push({name: values.name, profileImage: uploadImageUrl, eventDate: dayjs(values.eventDate).format('YYYY-MM-DD')});
             } else {
-                memberArray[values.index] = {name: values.name, url: uploadImageUrl, date: dayjs(values.eventDate).format('YYYY-MM-DD')};
+                memberArray[values.index] = {name: values.name, profileImage: uploadImageUrl, eventDate: dayjs(values.eventDate).format('YYYY-MM-DD')};
             }
             setMemberData(memberArray);
         }
@@ -135,6 +141,33 @@ const CelebForm = (props) => {
         setPreviewOpen(false);
     }
 
+    /* Save Celeb */
+    const saveCeleb = async () => {
+        axios({
+            method: 'post',
+            url: `${process.env.REACT_APP_API_URL}/celeb`,
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${auth.token}`,
+            },
+            data: JSON.stringify({
+                celeb: celebData,
+                members: memberData,
+            }),
+        })
+        .then((response) => {
+            if(response.status === 200) {
+                message.success(`셀럽 추가 요청이 완료되었습니다.`);
+                navigate(`/`);
+            } else {
+                message.warning(`셀럽 추가 요청에 실패하였습니다.`);
+            }
+        })
+        .catch((error) => {
+            message.warning('오류가 발생했습니다.')
+        });
+    }
+    
     return ( 
         <div className='form-celeb'>
             <h3>셀럽 추가 요청</h3>
@@ -145,12 +178,12 @@ const CelebForm = (props) => {
                             className="celeb-plus-button" 
                             size={80} 
                             icon={<PlusOutlined/>} 
-                            src={celebData && celebData.url}
-                            onClick={celebData ? () => openCelebAddModal('C', celebData.name, celebData.date, celebData.url) : () => openCelebAddModal('C')}
+                            src={celebData && celebData.profileImage}
+                            onClick={celebData ? () => openCelebAddModal('C', celebData.name, celebData.eventDate, celebData.profileImage) : () => openCelebAddModal('C')}
                         />
                         <div className="celeb-info-item">
                             <span>{celebData && celebData.name}</span>
-                            <span>{celebData && celebData.date}</span>
+                            <span>{celebData && celebData.eventDate}</span>
                         </div>
                     </div>
                 </div>
@@ -170,16 +203,16 @@ const CelebForm = (props) => {
                 >
                     {memberData.map((member, index) => (
                         <SwiperSlide className="celeb-swiper-item">
-                            <div className="celeb-avatar-add" onClick={() => openCelebAddModal('M', member.name, member.date, member.url, index)}>
+                            <div className="celeb-avatar-add" onClick={() => openCelebAddModal('M', member.name, member.eventDate, member.profileImage, index)}>
                                 <div className="celeb-avatar-add-item">
                                     <Avatar 
                                         className="celeb-plus-button"
                                         size={80} 
-                                        src={member.url}
+                                        src={member.profileImage}
                                     />
                                     <div className="celeb-info-item">
                                         <span>{member.name}</span>
-                                        <span>{member.date}</span>
+                                        <span>{member.eventDate}</span>
                                     </div>
                                 </div>
                             </div>
@@ -194,7 +227,8 @@ const CelebForm = (props) => {
                     centered
                     destroyOnClose={true}
                     open={celebModalOpen}
-                    onCancel={closeCelebModal}
+                    closable={false}
+                    maskClosable={false}
                     footer={null}
                 >
                     <Form layout='vertical' form={form} onFinish={setAvatarInfo}>
@@ -248,6 +282,10 @@ const CelebForm = (props) => {
                 >
                     <img style={{width: 'auto'}} src={previewImage}/>
                 </Modal>
+            </div>
+            <div className="celeb-form-button">
+                <Button danger>취소</Button>
+                <Button onClick={saveCeleb}>추가 요청</Button>
             </div>
         </div>
     );
