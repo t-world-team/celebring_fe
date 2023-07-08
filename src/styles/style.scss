@@ -482,6 +482,31 @@
     }
 }
 
+/* celeb add modal */
+.celeb-avatar-add {
+    .celeb-avatar-add-item {
+        display: inline-flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 8px;
+        .celeb-info-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 3px;
+            font-size: $font-s;
+        }
+    }
+}
+.modal-footer-button {
+    display: flex;
+    justify-content: flex-end;
+    margin: 0;
+    button {
+        margin-left: 10px;
+    }
+}
+
 /* tab */
 .ant-tabs-nav-wrap {
     display: block!important;

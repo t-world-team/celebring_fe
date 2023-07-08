@@ -1,39 +1,55 @@
-import React, { useState } from 'react';
-
-import { Avatar, DatePicker, Form, Input, Modal, Upload, message } from 'antd';
-import { PlusOutlined } from '@ant-design/icons';
-import locale from 'antd/es/date-picker/locale/ko_KR';
-import ImgCrop from 'antd-img-crop';
-import dayjs from 'dayjs';
+import React from 'react';
 
 import { Swiper, SwiperSlide } from 'swiper/react';
+import { PlusOutlined } from '@ant-design/icons';
 import { FreeMode } from 'swiper';
+import { Avatar, Button, DatePicker, Form, Input, Modal, Upload, message } from 'antd';
+import { useState } from 'react';
+import ImgCrop from 'antd-img-crop';
+import locale from 'antd/es/date-picker/locale/ko_KR';
+import dayjs from 'dayjs';
 import axios from 'axios';
 
 const CelebForm = (props) => {
+    const [celebData, setCelebData] = useState();
+    const [memberData, setMemberData] = useState([]);
+
     const [form] = Form.useForm();
 
-    const [celebModalOpen, setCelebModalOpen] = useState(false);
-    const [imageLoading, setImageLoading] = useState(false);
-   
-    const [uploadImageUrl, setUploadImageUrl] = useState('');
+    /* Celeb Add Form Modal */
+    const [celebModalOpen, setCelebModalOpen] = useState();
     const [fileList, setFileList] = useState([]);
+
+    /* Image Preview Modal */
+    const [previewOpen, setPreviewOpen] = useState(false);
+    const [previewImage, setPreviewImage] = useState('');
+
+    const [uploadImageUrl, setUploadImageUrl] = useState(''); // cloudinary url
     
-    const openCelebModal = () => {
+
+    /* Celeb Add Form Modal */
+    // Modal open
+    const openCelebAddModal = (type, name, date, url, index) => {
+        if(type === 'M' && (celebData === undefined || celebData === null)) {
+            message.warning("셀럽을 먼저 추가해 주세요");
+            return false;
+        }
+
+        if(url === undefined) {
+            setFileList([]);
+        } else {
+            setFileList([{url: url, status: 'done'}]);
+        }
+        
+        form.setFieldsValue({name: name});
+        form.setFieldsValue({eventDate: date ? dayjs(date, 'YYYY-MM-DD') : null});
+        form.setFieldsValue({index: index});
+        form.setFieldsValue({type: type});
         setCelebModalOpen(true);
     }
-    const closeCelebModal = () => {
-        setCelebModalOpen(false);
-        setFileList([]);
-    }
 
-    const changeImage = (info) => {
-        setFileList(info.fileList);
-    };
-
-    const uploadImage = async options => {
-        const { onSuccess, onError, file, onProgress } = options;
-
+    // Validate image
+    const validateImage = (file) => {
         let validateSize = true;
         let validateExst = true;
 
@@ -46,54 +62,98 @@ const CelebForm = (props) => {
             validateExst = false;
         }
 
-        if(validateSize && validateExst) {
-            const formData = new FormData();
-            formData.append("files", file);
-
-            axios.post(`${process.env.REACT_APP_API_URL}/image`, formData, {
-                headers: {
-                    'Content-Type': 'multipart/form-data',
-                },
-                onUploadProgress: event => {
-                    onProgress({percent: (event.loaded / event.total) * 100});
-                }
-            })
-            .then((response) => {
-                if(response.status === 200) {
-                    onSuccess("Ok");
-                    setUploadImageUrl(response.data[0].url);
-                    console.log(uploadImageUrl);
-                } else {
-                    onError(new Error('업로드 실패'));
-                }
-            })
-            .catch((error) => {
-                onError(new Error('업로드 실패'));
-            });
-        } else {
-            setFileList([]);
-            onError(new Error('업로드 실패'));
-        }
+        return (validateSize && validateExst) || Upload.LIST_IGNORE;
     }
 
-    const [previewOpen, setPreviewOpen] = useState(false);
-    const [previewImage, setPreviewImage] = useState('');
+    // Change Image
+    const changeImage = (info) => {
+        setFileList(info.fileList);
+    };
 
+    // Remove Image
+    const removeImage = () => {
+        setFileList('');
+    }
+
+    // Select Image > Upload to Cloudinary
+    const uploadImage = async options => {
+        const { onSuccess, onError, file, onProgress } = options;
+        const formData = new FormData();
+        formData.append("files", file);
+
+        axios.post(`${process.env.REACT_APP_API_URL}/image`, formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            },
+            onUploadProgress: event => {
+                onProgress({percent: (event.loaded / event.total) * 100});
+            }
+        })
+        .then((response) => {
+            if(response.status === 200) {
+                onSuccess("Ok");
+                setUploadImageUrl(response.data[0].url);
+            } else {
+                onError(new Error('업로드 실패'));
+            }
+        })
+        .catch((error) => {
+            onError(new Error('업로드 실패'));
+        });
+    }
+
+    // Confirm > Set Avatar Info
+    const setAvatarInfo = (values) => {
+        if(values.type === 'C') {
+            setCelebData({name: values.name, url: uploadImageUrl, date: dayjs(values.eventDate).format('YYYY-MM-DD')});
+        } else {
+            const memberArray = memberData;
+            if(values.index === undefined || values.index === null) {
+                memberArray.push({name: values.name, url: uploadImageUrl, date: dayjs(values.eventDate).format('YYYY-MM-DD')});
+            } else {
+                memberArray[values.index] = {name: values.name, url: uploadImageUrl, date: dayjs(values.eventDate).format('YYYY-MM-DD')};
+            }
+            setMemberData(memberArray);
+        }
+
+        closeCelebModal();
+    }
+
+    // Close Celeb Add Form Modal
+    const closeCelebModal = () => {
+        setCelebModalOpen(false);
+    }
+
+
+    /* Image Preview Modal */
     const openPreviewModal = async (file) => {
         setPreviewImage(file.thumbUrl);
         setPreviewOpen(true);
     }
-
     const closePreviewModal = () => {
         setPreviewImage('');
         setPreviewOpen(false);
     }
-    
+
     return ( 
         <div className='form-celeb'>
             <h3>셀럽 추가 요청</h3>
             <div className="celeb-add">
-                <Avatar className="celeb-plus-button" size={80} icon={<PlusOutlined/>} onClick={openCelebModal}/>
+                <div className="celeb-avatar-add">
+                    <div className="celeb-avatar-add-item">
+                        <Avatar 
+                            className="celeb-plus-button" 
+                            size={80} 
+                            icon={<PlusOutlined/>} 
+                            src={celebData && celebData.url}
+                            onClick={celebData ? () => openCelebAddModal('C', celebData.name, celebData.date, celebData.url) : () => openCelebAddModal('C')}
+                        />
+                        <div className="celeb-info-item">
+                            <span>{celebData && celebData.name}</span>
+                            <span>{celebData && celebData.date}</span>
+                        </div>
+                    </div>
+                </div>
             </div>
             <div className="celeb-member-add">
                 <div className="celeb-member-title">
@@ -107,61 +167,88 @@ const CelebForm = (props) => {
                     modules={[FreeMode]}
                     className="celeb-member-add-swiper"
                     style={{height: 'auto'}}
-                    >
-                        {/* {celebs.map(celeb => 
-                            <SwiperSlide className="celeb-swiper-item"><CelebAvatar url={celeb.profileImage} name={celeb.name} id={celeb.id} group={group} groupName={celeb.groupName} like={celeb.like} useLike={useLike}/></SwiperSlide>
-                        )} */}
+                >
+                    {memberData.map((member, index) => (
                         <SwiperSlide className="celeb-swiper-item">
-                            <Avatar className="celeb-plus-button-plain" size={80} icon={<PlusOutlined/>} onClick={openCelebModal}/>
+                            <div className="celeb-avatar-add" onClick={() => openCelebAddModal('M', member.name, member.date, member.url, index)}>
+                                <div className="celeb-avatar-add-item">
+                                    <Avatar 
+                                        className="celeb-plus-button"
+                                        size={80} 
+                                        src={member.url}
+                                    />
+                                    <div className="celeb-info-item">
+                                        <span>{member.name}</span>
+                                        <span>{member.date}</span>
+                                    </div>
+                                </div>
+                            </div>
                         </SwiperSlide>
-                    </Swiper>
-            </div>
-            <Modal
-                title="셀럽 정보"
-                centered
-                destroyOnClose
-                okText="확인"
-                cancelText="취소"
-                open={celebModalOpen}
-                onCancel={closeCelebModal}
-            >
-                <Form layout='vertical' form={form}>
-                    <div className="celeb-image-upload">
-                        <ImgCrop rotationSlider>
-                            <Upload
-                                customRequest={uploadImage}
-                                listType="picture-circle"
-                                onChange={changeImage}
-                                maxCount={1}
-                                onPreview={openPreviewModal}
+                    ))}
+                    <SwiperSlide className="celeb-swiper-item">
+                        <Avatar className="celeb-plus-button-plain" size={80} icon={<PlusOutlined/>} onClick={() => openCelebAddModal('M')}/>
+                    </SwiperSlide>
+                </Swiper>
+                <Modal
+                    title="셀럽 정보"
+                    centered
+                    destroyOnClose={true}
+                    open={celebModalOpen}
+                    onCancel={closeCelebModal}
+                    footer={null}
+                >
+                    <Form layout='vertical' form={form} onFinish={setAvatarInfo}>
+                        <Form.Item name="type" hidden><Input/></Form.Item>
+                        <Form.Item name="index" hidden><Input/></Form.Item>
+                        <div className="celeb-image-upload">
+                            <ImgCrop 
+                                rotationSlider
+                                modalOk='확인'
+                                modalCancel='취소'
+                                modalTitle='이미지 편집'
+                                beforeCrop={validateImage}
                             >
-                                {fileList.length >= 1 ? null : 
-                                    <React.Fragment>
-                                        <PlusOutlined/>
-                                    </React.Fragment>
-                                }
-                            </Upload>
-                        </ImgCrop>
-                    </div>
-                    <Form.Item label='셀럽 이름' name="name" rules={[{required: true, message: '셀럽 이름을 입력하세요'}]}>
-                        <Input placeholder='셀럽 이름을 입력하세요'/>
-                    </Form.Item>
-                    <Form.Item label='데뷔일/생일' name="eventDate" rules={[{required: true, message: '데뷔일 혹은 생일을 선택하세요'}]}>
-                        <DatePicker inputReadOnly={true} locale={locale} style={{width: '100%'}} placeholder='데뷔일 혹은 생일을 선택하세요'/>
-                    </Form.Item>
-                </Form>
-            </Modal>
-            <Modal
-                open={previewOpen}
-                centered
-                title={null}
-                footer={null}
-                onCancel={closePreviewModal}
-                zIndex="9999"
-                width="auto"
-            >
-                <img style={{width: 'auto'}} src={previewImage}/>
-            </Modal>
+                                <Upload
+                                    customRequest={uploadImage}
+                                    listType="picture-circle"
+                                    onChange={changeImage}
+                                    maxCount={1}
+                                    onPreview={openPreviewModal}
+                                    onRemove={removeImage}
+                                    fileList={fileList}
+                                >
+                                    {fileList.length >= 1 ? null : 
+                                        <React.Fragment>
+                                            <PlusOutlined/>
+                                        </React.Fragment>
+                                    }
+                                </Upload>
+                            </ImgCrop>
+                        </div>
+                        <Form.Item label='셀럽 이름' name="name" rules={[{required: true, message: '셀럽 이름을 입력하세요'}]}>
+                            <Input placeholder='셀럽 이름을 입력하세요'/>
+                        </Form.Item>
+                        <Form.Item label='데뷔일/생일' name="eventDate" rules={[{required: true, message: '데뷔일 혹은 생일을 선택하세요'}]}>
+                            <DatePicker inputReadOnly={true} locale={locale} style={{width: '100%'}} placeholder='데뷔일 혹은 생일을 선택하세요'/>
+                        </Form.Item>
+                        <Form.Item className="modal-footer-button">
+                            <Button type="default" htmlType='button' onClick={closeCelebModal}>취소</Button>
+                            <Button type="primary" htmlType='submit'>확인</Button>
+                        </Form.Item>
+                    </Form>
+                </Modal>
+                <Modal
+                    open={previewOpen}
+                    centered
+                    title={null}
+                    footer={null}
+                    onCancel={closePreviewModal}
+                    zIndex="9999"
+                    width="auto"
+                >
+                    <img style={{width: 'auto'}} src={previewImage}/>
+                </Modal>
+            </div>
         </div>
     );
 }
