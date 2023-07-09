@@ -3,7 +3,7 @@ import React from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { PlusOutlined } from '@ant-design/icons';
 import { FreeMode } from 'swiper';
-import { Avatar, Button, DatePicker, Form, Input, Modal, Upload, message } from 'antd';
+import { Avatar, Button, DatePicker, Form, Input, Modal, Popconfirm, Upload, message } from 'antd';
 import { useState } from 'react';
 import ImgCrop from 'antd-img-crop';
 import locale from 'antd/es/date-picker/locale/ko_KR';
@@ -12,6 +12,8 @@ import axios from 'axios';
 import { useContext } from 'react';
 import { AuthContext } from '../contexts/auth-context';
 import { useNavigate } from 'react-router-dom';
+import DeleteBinLineIcon from 'remixicon-react/DeleteBinLineIcon';
+import PencilLineIcon from 'remixicon-react/PencilLineIcon';
 
 const CelebForm = (props) => {
     const auth = useContext(AuthContext);
@@ -25,13 +27,14 @@ const CelebForm = (props) => {
     /* Celeb Add Form Modal */
     const [celebModalOpen, setCelebModalOpen] = useState();
     const [fileList, setFileList] = useState([]);
+    const [noFile, setNoFile] = useState(false);
 
     /* Image Preview Modal */
     const [previewOpen, setPreviewOpen] = useState(false);
     const [previewImage, setPreviewImage] = useState('');
 
     const [uploadImageUrl, setUploadImageUrl] = useState(''); // cloudinary url
-    
+
 
     /* Celeb Add Form Modal */
     // Modal open
@@ -73,12 +76,13 @@ const CelebForm = (props) => {
 
     // Change Image
     const changeImage = (info) => {
-        setFileList(info.fileList);
+        if(info.file.status !== 'removed')
+            setFileList(info.fileList);
     };
 
     // Remove Image
     const removeImage = () => {
-        setFileList('');
+        setFileList([]);
     }
 
     // Select Image > Upload to Cloudinary
@@ -110,30 +114,38 @@ const CelebForm = (props) => {
 
     // Confirm > Set Avatar Info
     const setAvatarInfo = (values) => {
-        if(values.type === 'C') {
-            setCelebData({name: values.name, profileImage: uploadImageUrl, eventDate: dayjs(values.eventDate).format('YYYY-MM-DD')});
+        if(!fileList || fileList.length === 0) {
+            setNoFile(true);
         } else {
-            const memberArray = memberData;
-            if(values.index === undefined || values.index === null) {
-                memberArray.push({name: values.name, profileImage: uploadImageUrl, eventDate: dayjs(values.eventDate).format('YYYY-MM-DD')});
-            } else {
-                memberArray[values.index] = {name: values.name, profileImage: uploadImageUrl, eventDate: dayjs(values.eventDate).format('YYYY-MM-DD')};
-            }
-            setMemberData(memberArray);
-        }
+            setNoFile(false);
 
-        closeCelebModal();
+            if(values.type === 'C') {
+                setCelebData({name: values.name, profileImage: uploadImageUrl, eventDate: dayjs(values.eventDate).format('YYYY-MM-DD')});
+            } else {
+                const memberArray = memberData;
+                if(values.index === undefined || values.index === null) {
+                    memberArray.push({name: values.name, profileImage: uploadImageUrl, eventDate: dayjs(values.eventDate).format('YYYY-MM-DD')});
+                } else {
+                    memberArray[values.index] = {name: values.name, profileImage: uploadImageUrl, eventDate: dayjs(values.eventDate).format('YYYY-MM-DD')};
+                }
+                setMemberData(memberArray);
+            }
+    
+            closeCelebModal();
+        }
     }
 
     // Close Celeb Add Form Modal
     const closeCelebModal = () => {
         setCelebModalOpen(false);
+        setNoFile(false);
     }
 
 
     /* Image Preview Modal */
     const openPreviewModal = async (file) => {
-        setPreviewImage(file.thumbUrl);
+        const imageUrl = file.thumbUrl ? file.thumbUrl : file.url;
+        setPreviewImage(imageUrl);
         setPreviewOpen(true);
     }
     const closePreviewModal = () => {
@@ -168,24 +180,26 @@ const CelebForm = (props) => {
         });
     }
     
+    
+    /* Delete Avatar */
+    const deleteAvatar = (index) => {
+        const memberArray = [...memberData];
+        memberArray.splice(index, 1);
+        setMemberData(memberArray);
+    }
+
     return ( 
         <div className='form-celeb'>
             <h3>셀럽 추가 요청</h3>
             <div className="celeb-add">
                 <div className="celeb-avatar-add">
-                    <div className="celeb-avatar-add-item">
-                        <Avatar 
-                            className="celeb-plus-button" 
-                            size={80} 
-                            icon={<PlusOutlined/>} 
-                            src={celebData && celebData.profileImage}
-                            onClick={celebData ? () => openCelebAddModal('C', celebData.name, celebData.eventDate, celebData.profileImage) : () => openCelebAddModal('C')}
-                        />
-                        <div className="celeb-info-item">
-                            <span>{celebData && celebData.name}</span>
-                            <span>{celebData && celebData.eventDate}</span>
-                        </div>
-                    </div>
+                    <CelebAddAvatar 
+                        celebType="C" 
+                        name={celebData && celebData.name} 
+                        eventDate={celebData && celebData.eventDate}
+                        profileImage={celebData && celebData.profileImage}
+                        onEdit={openCelebAddModal}
+                    />
                 </div>
             </div>
             <div className="celeb-member-add">
@@ -203,23 +217,24 @@ const CelebForm = (props) => {
                 >
                     {memberData.map((member, index) => (
                         <SwiperSlide className="celeb-swiper-item">
-                            <div className="celeb-avatar-add" onClick={() => openCelebAddModal('M', member.name, member.eventDate, member.profileImage, index)}>
-                                <div className="celeb-avatar-add-item">
-                                    <Avatar 
-                                        className="celeb-plus-button"
-                                        size={80} 
-                                        src={member.profileImage}
-                                    />
-                                    <div className="celeb-info-item">
-                                        <span>{member.name}</span>
-                                        <span>{member.eventDate}</span>
-                                    </div>
-                                </div>
+                            <div className="celeb-avatar-add">
+                                <CelebAddAvatar 
+                                    celebType="M" 
+                                    name={member.name} 
+                                    eventDate={member.eventDate}
+                                    profileImage={member.profileImage}
+                                    index={index}
+                                    onEdit={openCelebAddModal}
+                                    onDelete={deleteAvatar}
+                                />
                             </div>
                         </SwiperSlide>
                     ))}
                     <SwiperSlide className="celeb-swiper-item">
-                        <Avatar className="celeb-plus-button-plain" size={80} icon={<PlusOutlined/>} onClick={() => openCelebAddModal('M')}/>
+                        <CelebAddAvatar 
+                            celebType="M" 
+                            onEdit={openCelebAddModal}
+                        />
                     </SwiperSlide>
                 </Swiper>
                 <Modal
@@ -258,6 +273,7 @@ const CelebForm = (props) => {
                                     }
                                 </Upload>
                             </ImgCrop>
+                            {noFile && <div className="ant-form-item-explain-error">이미지를 업로드 해주세요</div>}
                         </div>
                         <Form.Item label='셀럽 이름' name="name" rules={[{required: true, message: '셀럽 이름을 입력하세요'}]}>
                             <Input placeholder='셀럽 이름을 입력하세요'/>
@@ -279,8 +295,9 @@ const CelebForm = (props) => {
                     onCancel={closePreviewModal}
                     zIndex="9999"
                     width="auto"
+                    style={{maxWidth: 400}}
                 >
-                    <img style={{width: 'auto'}} src={previewImage}/>
+                    <img style={{width: 'auto', maxWidth: 352}} src={previewImage}/>
                 </Modal>
             </div>
             <div className="celeb-form-button">
@@ -289,6 +306,51 @@ const CelebForm = (props) => {
             </div>
         </div>
     );
+}
+
+const CelebAddAvatar = (props) => {
+    const celebType = props.celebType;
+    const name = props.name;
+    const eventDate = props.eventDate;
+    const profileImage = props.profileImage;
+    const index = props.index;
+    const editAvatar = props.onEdit;
+    const deleteAvatar = props.onDelete;
+
+    const onEdit = () => {
+        editAvatar(celebType, name, eventDate, profileImage, index);
+    }
+
+    const onDelete = () => {
+        deleteAvatar(index);
+    }
+
+    return (
+        <div className="celeb-avatar-add-item">
+            <Avatar 
+                className={celebType === 'C' ? "celeb-plus-button" : "celeb-plus-button-plain"} 
+                size={100} 
+                icon={<PlusOutlined/>} 
+                src={profileImage}
+                onClick={onEdit}
+            />
+            <div className="celeb-info-item">
+                <span className="celeb-info-item-name">{name}</span>
+                <span className="celeb-info-item-date">{eventDate}</span>
+            </div>
+            {name ? 
+                <div className="celeb-edit-item">
+                    <Button type="text" shape="circle" size="small" icon={<PencilLineIcon size="1.2rem"/>} onClick={onEdit}/>
+                    {celebType === 'C' ? null : 
+                        <Popconfirm title="멤버를 삭제하시겠습니까?" placement="bottom" onConfirm={onDelete} okText="삭제" cancelText="취소">
+                            <Button type="text" shape="circle" size="small" icon={<DeleteBinLineIcon size="1.1rem" color="#800"/>}/>
+                        </Popconfirm>
+                    }
+                </div>
+                : null
+            }
+        </div>
+    )
 }
 
 export default CelebForm;

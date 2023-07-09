@@ -496,13 +496,27 @@
         display: inline-flex;
         flex-direction: column;
         align-items: center;
-        gap: 8px;
+        gap: 2px;
         .celeb-info-item {
             display: flex;
             flex-direction: column;
             align-items: center;
+            margin-top: 6px;
             gap: 3px;
-            font-size: $font-s;
+            .celeb-info-item-name {
+                font-size: $font-m;
+            }
+            .celeb-info-item-date {
+                font-size: $font-s;
+            }
+        }
+        .celeb-edit-item {
+            display: flex;
+            gap: 2px;
+            button svg {
+                vertical-align: text-bottom;
+                padding-bottom: 1px;
+            }
         }
     }
 }
