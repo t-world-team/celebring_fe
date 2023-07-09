@@ -159,7 +159,9 @@ const Character = (props) => {
                         </> : <EventSkeleton /> }
                     </React.Fragment> :
                     <React.Fragment>
-                        <CalendarItem/>
+                        <CalendarItem 
+                            anniversary = {`${eventDate.substring(5)}`}
+                        />
                     </React.Fragment>
                 }
             </div>
