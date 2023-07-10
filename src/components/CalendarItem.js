@@ -24,10 +24,9 @@ const CalendarItem = (props) => {
     const [eventList, setEventList] = useState([]);
     const [isLoad, setIsLoad] = useState(false);
     const [isEventLoad, setIsEventLoad] = useState(false);
-    
-    const getEvent = (key) => {
-        return eventList[key];
-    }
+
+    let page = 0;
+    let pageSize = 10;
 
     function changeDateTitle(dayjs) {
         let calDate = dayjs.year() + '-' + (dayjs.month() < 9 ? '0' : '') + (dayjs.month()+1);
@@ -65,7 +64,7 @@ const CalendarItem = (props) => {
 
         setIsEventLoad(false);
         setDay(search);
-        axios.get(`${process.env.REACT_APP_API_URL}/events/${params.id}/calendar?day=${search}&type=day`)
+        axios.get(`${process.env.REACT_APP_API_URL}/events/${params.id}/calendar?day=${search}&type=day&page=${page}&size=${pageSize}`)
             .then((res) => res.data)
             .then((data) => {
                 if (!data.empty) {
@@ -85,7 +84,7 @@ const CalendarItem = (props) => {
     useEffect(() => {
         setIsLoad(false);
         let search = month ? month : today.getFullYear() + '-' + ('0'+ (today.getMonth() + 1)).slice(-2);
-        axios.get(`${process.env.REACT_APP_API_URL}/events/${params.id}/calendar?day=${search}&type=month`)
+        axios.get(`${process.env.REACT_APP_API_URL}/events/${params.id}/calendar?day=${search}&type=month&page=${page}`)
             .then((res) => res.data)
             .then((data) => {
                 if (!data.empty) {
@@ -141,25 +140,19 @@ const CalendarItem = (props) => {
                 }}/>
                 <div className="event-list">
                     <h4>{day}</h4>
-                    {/* {events} */}
                     {eventList ?
                             isEventLoad ? 
-                                Object.keys(eventList).map((key) => {
-                                    return (
-                                        <div className="event-item">
-                                            <EventItem 
-                                                id =  {`${getEvent(key).eventId}`}
-                                                title = {`${getEvent(key).eventName}`}
-                                                date = {`${getEvent(key).startDate}~${getEvent(key).endDate}`}
-                                                location = {`${getEvent(key).address}(${getEvent(key).cafeName})`}
-                                                celebs = {`${getEvent(key).celeb}`}
-                                                thumbnail = {`${getEvent(key).thumbnail[0]}`}
-                                            />
-                                        </div>
-                                    )
-                                }) : <EventSkeletonList count={2} />
-                            : null
-                        } 
+                                eventList.map(item => (
+                                    <EventItem 
+                                        id =  {`${item.eventId}`}
+                                        title = {`${item.eventName}`}
+                                        date = {`${item.startDate}~${item.endDate}`}
+                                        location = {`${item.address}(${item.cafeName})`}
+                                        celebs = {`${item.celeb}`}
+                                        thumbnail = {`${item.thumbnail[0]}`}
+                                    />)) : <></>
+                                : <EventSkeletonList count={2} />
+                            } 
                 </div>
             </ConfigProvider>
         </div>

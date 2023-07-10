@@ -50,13 +50,8 @@ const MyPage = (props) => {
     const [regEventList, setRegEventList] = useState([]);
     const [regEventLoad, setRegEventLoad] = useState(false);
 
-    const getFavEvent = (key) => {
-        return favEventList[key];
-    }
-
-    const getRegEvent = (key) => {
-        return regEventList[key];
-    }
+    let page = 0;
+    let pageSize = 30;
 
     useEffect(() => {
         setCelebLoad(false);
@@ -94,7 +89,7 @@ const MyPage = (props) => {
         if(auth.token) {
             axios({
                 method: 'get',
-                url: `${process.env.REACT_APP_API_URL}/events/favorite?page=0`,
+                url: `${process.env.REACT_APP_API_URL}/events/favorite?page=${page}&size=${pageSize}`,
                 headers: {
                     'Content-Type': 'application/json',
                     Authorization: `Bearer ${auth.token}`,
@@ -121,7 +116,7 @@ const MyPage = (props) => {
         if(auth.token) {
             axios({
                 method: 'get',
-                url: `${process.env.REACT_APP_API_URL}/events/my?page=0`,
+                url: `${process.env.REACT_APP_API_URL}/events/my?page=${page}&size=${pageSize}`,
                 headers: {
                     'Content-Type': 'application/json',
                     Authorization: `Bearer ${auth.token}`,
@@ -179,20 +174,16 @@ const MyPage = (props) => {
                     <div className="event-items">
                         {favEventList ?
                             favEventLoad ? 
-                                Object.keys(favEventList).map((key) => {
-                                    return (
-                                        <div className="event-item">
-                                            <EventItem 
-                                                id =  {`${getFavEvent(key).eventId}`}
-                                                title = {`${getFavEvent(key).eventName}`}
-                                                date = {`${getFavEvent(key).startDate}~${getFavEvent(key).endDate}`}
-                                                location = {`${getFavEvent(key).address}(${getFavEvent(key).cafeName})`}
-                                                celebs = {`${getFavEvent(key).celeb}`}
-                                                thumbnail = {`${getFavEvent(key).thumbnail[0]}`}
-                                            />
-                                        </div>
-                                    )
-                                }) : <EventSkeletonList count={4} />
+                                favEventList.map(item => (
+                                    <EventItem 
+                                        id =  {`${item.eventId}`}
+                                        title = {`${item.eventName}`}
+                                        date = {`${item.startDate}~${item.endDate}`}
+                                        location = {`${item.address}(${item.cafeName})`}
+                                        celebs = {`${item.celeb}`}
+                                        thumbnail = {`${item.thumbnail[0]}`}
+                                    />
+                                )) : <EventSkeletonList count={4} />
                             : null
                         } 
                     </div>
@@ -209,20 +200,16 @@ const MyPage = (props) => {
                     <div className="event-items">
                         {regEventList ?
                             regEventLoad ? 
-                                Object.keys(regEventList).map((key) => {
-                                    return (
-                                        <div className="event-item">
-                                            <EventItem 
-                                                id =  {`${getRegEvent(key).eventId}`}
-                                                title = {`${getRegEvent(key).eventName}`}
-                                                date = {`${getRegEvent(key).startDate}~${getRegEvent(key).endDate}`}
-                                                location = {`${getRegEvent(key).address}(${getRegEvent(key).cafeName})`}
-                                                celebs = {`${getRegEvent(key).celeb}`}
-                                                thumbnail = {`${getRegEvent(key).thumbnail[0]}`}
-                                            />
-                                        </div>
-                                    )
-                                }) : <EventSkeletonList count={6} />
+                                regEventList.map(item => (
+                                    <EventItem 
+                                        id =  {`${item.eventId}`}
+                                        title = {`${item.eventName}`}
+                                        date = {`${item.startDate}~${item.endDate}`}
+                                        location = {`${item.address}(${item.cafeName})`}
+                                        celebs = {`${item.celeb}`}
+                                        thumbnail = {`${item.thumbnail[0]}`}
+                                    />
+                             )) : <EventSkeletonList count={6} />
                             : null
                         } 
                     </div>
