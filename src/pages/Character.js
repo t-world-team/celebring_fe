@@ -31,9 +31,8 @@ const Character = (props) => {
                         Authorization: `Bearer ${auth.token}`,
                     } : null;
 
-    const getEvent = (key) => {
-        return eventList[key];
-    }
+    let page = 0;
+    let pageSize = 30;
 
     useEffect(() => {
         loading.showLoading(true);
@@ -44,7 +43,7 @@ const Character = (props) => {
 
     useEffect(() => {
         setIsLoad(false);
-        axios.get(`${process.env.REACT_APP_API_URL}/events/${params.id}?page=0`)
+        axios.get(`${process.env.REACT_APP_API_URL}/events/${params.id}?page=${page}&size=${pageSize}`)
             .then((res) => res.data)
             .then((data) => {
                 if (!data.empty) {
@@ -144,18 +143,16 @@ const Character = (props) => {
                     <React.Fragment>
                         { isLoad ? 
                         <>
-                            { eventList ? Object.keys(eventList).map((key) => {
-                                return (
-                                    <EventItem 
-                                        id =  {`${getEvent(key).eventId}`}
-                                        title = {`${getEvent(key).eventName}`}
-                                        date = {`${getEvent(key).startDate}~${getEvent(key).endDate}`}
-                                        location = {`${getEvent(key).address}(${getEvent(key).cafeName})`}
-                                        celebs = {`${getEvent(key).celeb}`}
-                                        thumbnail = {`${getEvent(key).thumbnail[0]}`}
-                                    />
-                                )
-                            }) : <div>이벤트가 존재하지 않습니다.</div>}
+                            { eventList ? eventList.map(item => (
+                                <EventItem 
+                                    id =  {`${item.eventId}`}
+                                    title = {`${item.eventName}`}
+                                    date = {`${item.startDate}~${item.endDate}`}
+                                    location = {`${item.address}(${item.cafeName})`}
+                                    celebs = {`${item.celeb}`}
+                                    thumbnail = {`${item.thumbnail[0]}`}
+                                />
+                            )) : <div>이벤트가 존재하지 않습니다.</div>}
                         </> : <EventSkeleton /> }
                     </React.Fragment> :
                     <React.Fragment>
