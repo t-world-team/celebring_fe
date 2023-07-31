@@ -117,26 +117,31 @@ const CelebForm = (props) => {
         if(!fileList || fileList.length === 0) {
             setNoFile(true);
         } else {
-            setNoFile(false);
+            if(fileList[0].status === 'done') {
+                setNoFile(false);
 
-            if(values.type === 'C') {
-                setCelebData({name: values.name, profileImage: uploadImageUrl, eventDate: dayjs(values.eventDate).format('YYYY-MM-DD')});
-            } else {
-                const memberArray = memberData;
-                if(values.index === undefined || values.index === null) {
-                    memberArray.push({name: values.name, profileImage: uploadImageUrl, eventDate: dayjs(values.eventDate).format('YYYY-MM-DD')});
+                if(values.type === 'C') {
+                    setCelebData({name: values.name, profileImage: uploadImageUrl, eventDate: dayjs(values.eventDate).format('YYYY-MM-DD')});
                 } else {
-                    memberArray[values.index] = {name: values.name, profileImage: uploadImageUrl, eventDate: dayjs(values.eventDate).format('YYYY-MM-DD')};
+                    const memberArray = [...memberData];
+                    if(values.index === undefined || values.index === null) {
+                        memberArray.push({name: values.name, profileImage: uploadImageUrl, eventDate: dayjs(values.eventDate).format('YYYY-MM-DD')});
+                    } else {
+                        memberArray[values.index] = {name: values.name, profileImage: uploadImageUrl, eventDate: dayjs(values.eventDate).format('YYYY-MM-DD')};
+                    }
+                    setMemberData(memberArray);
                 }
-                setMemberData(memberArray);
+        
+                closeCelebModal();
+            } else {
+                message.warning('이미지 업로드가 완료되지 않았습니다.');
             }
-    
-            closeCelebModal();
         }
     }
 
     // Close Celeb Add Form Modal
     const closeCelebModal = () => {
+        setUploadImageUrl('');
         setCelebModalOpen(false);
         setNoFile(false);
     }
@@ -215,6 +220,12 @@ const CelebForm = (props) => {
                     className="celeb-member-add-swiper"
                     style={{height: 'auto'}}
                 >
+                    <SwiperSlide className="celeb-swiper-item">
+                        <CelebAddAvatar 
+                            celebType="M" 
+                            onEdit={openCelebAddModal}
+                        />
+                    </SwiperSlide>
                     {memberData.map((member, index) => (
                         <SwiperSlide className="celeb-swiper-item">
                             <div className="celeb-avatar-add">
@@ -230,12 +241,6 @@ const CelebForm = (props) => {
                             </div>
                         </SwiperSlide>
                     ))}
-                    <SwiperSlide className="celeb-swiper-item">
-                        <CelebAddAvatar 
-                            celebType="M" 
-                            onEdit={openCelebAddModal}
-                        />
-                    </SwiperSlide>
                 </Swiper>
                 <Modal
                     title="셀럽 정보"
