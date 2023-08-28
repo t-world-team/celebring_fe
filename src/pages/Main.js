@@ -71,7 +71,7 @@ const Main = () => {
         <React.Fragment>
             <Swiper/>
             <div className="list-celeb">
-                <h3>타이틀을 입력하세요</h3>
+                <h3>즐겨찾는 셀럽</h3>
                 { !auth.isLoggedIn || celebLoad ?
                     <CelebSwiper list={auth.isLoggedIn ? celebList : null}/>
                 : <AvatarSkeletonList count={3}/>
